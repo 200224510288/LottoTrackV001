@@ -1,7 +1,9 @@
+version: '3.8'
+
 services:
-  postgres:
+  postgress:
     image: postgres:15
-    container_name: postgresLotteryDB
+    container_name: postgresLottery
     environment:
       POSTGRES_USER: Lottery
       POSTGRES_PASSWORD: aloka0777
@@ -13,13 +15,13 @@ services:
     
   app:
     build: .
-    container_name: lotteryApp
+    container_name: LotteryApp
     ports:
       - '3000:3000'
     environment:
-      DATABASE_URL: postgresql://Lottery:aloka0777@postgres:5432/LottoTrack
+      DATABASE_URL: postgresql://Lottery:aloka0777@localhost:5432/LottoTrack
     depends_on:
-      - postgres
+      - postgress
 
 volumes:
   postgres_data:
