@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   postgress:
@@ -9,19 +8,19 @@ services:
       POSTGRES_PASSWORD: aloka0777
       POSTGRES_DB: LottoTrack
     ports:
-      - '5432:5432⁠'
+      - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
     
   app:
     build: .
-    container_name: nextjs_app
+    container_name: postgresLottery
     ports:
       - '3000:3000'
     environment:
-      - DATABASE_URL: postgresql://Lottery:aloka0777@localhost:5432/LottoTrack
+      DATABASE_URL: postgresql://Lottery:aloka0777@localhost:5432/LottoTrack
     depends_on:
-      - postgres
+      - postgress
 
 volumes:
   postgres_data:
