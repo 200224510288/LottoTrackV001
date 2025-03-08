@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Lama Dev School Management Dashboard
 
 ## Getting Started
@@ -24,3 +25,7 @@ To learn more about Next.js, take a look at the following resources:
 
 - [Lama Dev Youtube Channel](https://youtube.com/lamadev) 
 - [Next.js](https://nextjs.org/learn)
+=======
+# LottoTrackV001
+Lottery management
+>>>>>>> 5e277276fafda8d185c81e2a08d90cd1f60453d6
