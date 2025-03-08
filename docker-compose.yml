@@ -21,7 +21,7 @@ services:
     ports:
       - '3000:3000'
     environment:
-      DATABASE_URL: "postgresql://Lottery:aloka0777@postgres:5432/LottoTrack"  # Correctly link to `postgres` service
+      DATABASE_URL: "postgresql://Lottery:aloka0777@localhost:5432/LottoTrack"  # Correctly link to `postgres` service
     depends_on:
       - postgres
     networks:
