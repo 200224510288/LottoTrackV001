@@ -3,11 +3,11 @@ version: '3.8'
 services:
   postgress:
     image: postgres:15
-    container_name: postgresLottery
+    container_name: postgres_db
     environment:
-      POSTGRES_USER: Lottery
-      POSTGRES_PASSWORD: aloka0777
-      POSTGRES_DB: LottoTrack
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydb
     ports:
       - '5432:5432'
     volumes:
@@ -15,13 +15,13 @@ services:
     
   app:
     build: .
-    container_name: LotteryApp
+    container_name: nextjs_app
     ports:
       - '3000:3001'
     environment:
-      DATABASE_URL: postgresql://Lottery:aloka0777@localhost:5432/LottoTrack
+      DATABASE_URL: postgresql://myuser:mypassword@localhost:5432/mydb
     depends_on:
-      - postgress
+      - postgres
 
 volumes:
   postgres_data:
