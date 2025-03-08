@@ -1,28 +1,26 @@
+# Use Node.js as the base image
 FROM node:18
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the package.json and package-lock.json (or yarn.lock) into the container
+# Copy package.json and package-lock.json files
 COPY package*.json ./
 
-# Install production dependencies first to leverage Docker's cache mechanism
-RUN npm install --production
+# Install dependencies
+RUN npm install
 
-# Copy the rest of the application code into the container
+# Copy the rest of the application code
 COPY . .
 
-# Generate Prisma migrations (for production, run this manually or handle it in the entrypoint)
-RUN npx prisma generate
+# Generate Database
+RUN npx prisma migrate dev --name init
 
 # Build the Next.js application
 RUN npm run build
 
-# Expose port 3001 (or 3000, based on your app's port configuration)
-EXPOSE 3001
-
-# Set the environment variable for the port in the app
-ENV PORT=3001
+# Expose the port the app runs on
+EXPOSE 3000
 
 # Start the Next.js application
 CMD ["npm", "start"]
