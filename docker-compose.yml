@@ -1,8 +1,8 @@
 
 services:
-  postgress:
+  postgres:
     image: postgres:15
-    container_name: postgresLottery
+    container_name: postgres_db
     environment:
       POSTGRES_USER: Lottery
       POSTGRES_PASSWORD: aloka0777
@@ -11,16 +11,24 @@ services:
       - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
     
   app:
     build: .
-    container_name: postgresLottery
+    container_name: LotteryApp
     ports:
       - '3000:3000'
     environment:
-      DATABASE_URL: postgresql://Lottery:aloka0777@localhost:5432/LottoTrack
+      DATABASE_URL: "postgresql://Lottery:aloka0777@postgres:5432/LottoTrack"  # Change localhost to postgres (service name)
     depends_on:
-      - postgress
+      - postgres
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   postgres_data:
