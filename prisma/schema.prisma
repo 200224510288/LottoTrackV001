@@ -1,0 +1,133 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  UserID   Int     @id @default(autoincrement()) 
+  Email    String  @unique
+  UserName String
+  Password String
+
+  Agent    Agent?
+  Staff    Staff?
+}
+
+model Agent {
+  AgentID       Int     @id
+  FirstName     String
+  LastName      String
+  OfficeAddress String?
+  HomeAddress   String?
+  City          String
+
+  User  User   @relation(fields: [AgentID], references: [UserID])
+  Agent_Contact_Number   Agent_Contact_Number[]
+  Orders       Order[]
+
+}
+
+model Agent_Contact_Number {
+  AgentID       Int
+  ContactNumber String
+
+  Agent         Agent    @relation(fields: [AgentID], references: [AgentID])
+
+  @@id([AgentID, ContactNumber]) // Composite primary key for unique agent-number pairs
+}
+
+model Staff {
+  StaffID      Int     @id
+  Section      String?
+  FirstName    String
+  LastName     String
+  SuperviserID Int?
+  
+  User         User   @relation(fields: [StaffID], references: [UserID])
+  Orders       Order[]
+  StockItems   Stock[]
+  Deliveries   Delivery[]
+  Lotteries    Lottery[]
+
+
+}
+
+
+model Order {
+  OrderID         Int     @id @default(autoincrement())
+  AgentID         Int
+  StaffID         Int?
+  OrderDate       DateTime @default(now())
+  OrderTime       DateTime @default(now())
+  Status          String
+  TotalAmount     Float
+  TotalCommission Float
+
+  Agent           Agent   @relation(fields: [AgentID], references: [AgentID])
+  Staff           Staff?  @relation(fields: [StaffID], references: [StaffID])
+  Delivery        Delivery?
+  
+  ContainedLotteries Order_Contain_Lottery[]
+
+}
+
+model Delivery {
+  DeliveryID    Int   @id @default(autoincrement())
+  StaffID       Int
+  OrderID       Int   @unique
+  NumberPlate   String
+  BusType       String?
+  ArrivalTime   DateTime?
+  DispatchTime  DateTime
+
+  Order         Order?  @relation(fields: [OrderID], references: [OrderID])  // Optional relation
+
+  Staff         Staff @relation(fields: [StaffID], references: [StaffID])
+
+}
+ 
+
+model Lottery {
+  LotteryID        Int     @id @default(autoincrement()) 
+  StaffID          Int
+  LotteryName      String
+  DrawDate         DateTime
+  UnitPrice        Float
+  UnitCommission   Float
+  LastUpdateDate   DateTime @default(now())
+
+  Staff            Staff   @relation(fields: [StaffID], references: [StaffID])
+  ContainedOrders  Order_Contain_Lottery[]
+  Stock            Stock[]
+
+}
+
+
+
+
+model Order_Contain_Lottery {
+  LotteryID Int
+  OrderID   Int
+  Quantity  Int
+
+  Lottery   Lottery @relation(fields: [LotteryID], references: [LotteryID])
+  Order     Order   @relation(fields: [OrderID], references: [OrderID])
+
+  @@id([LotteryID, OrderID])
+}
+
+model Stock {
+  StockID        Int  @id @default(autoincrement())
+  StaffID        Int
+  LotteryID      Int  @unique
+  Availability   Boolean
+  LastUpdateDate DateTime @default(now())
+
+  Staff          Staff   @relation(fields: [StaffID], references: [StaffID])
+  Lottery        Lottery @relation(fields: [LotteryID], references: [LotteryID])
+
+}
