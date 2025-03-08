@@ -2,7 +2,7 @@ import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import prisma from "@/lib/prisma";
-import { Agent, Agent_Contact_Number, Prisma, User } from "@prisma/client";
+import {Prisma, Agent, Agent_Contact_Number, User } from "@prisma/client";
 import Image from "next/image";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import FormModal from "@/components/FormModal";
