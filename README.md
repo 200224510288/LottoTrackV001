@@ -1,5 +1,5 @@
 <<<<<<< HEAD
-# Lama Dev School Management Dashboard
+Lotto Management Dashboard
 
 ## Getting Started
 
