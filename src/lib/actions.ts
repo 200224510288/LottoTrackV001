@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { AgentSchema, StaffSchema, staffSchema } from "./formValidationSchemas";
+import { clerkClient } from "@clerk/clerk-sdk-node"; // Clerk SDK for Node.js
 import prisma from "./prisma";
 import { error } from "console";
 import { boolean } from "zod";
@@ -12,71 +13,67 @@ type CurrentState = { success: boolean; error: boolean };
 
 export const createAgent = async (currentState: CurrentState, data: AgentSchema) => {
   try {
-    // Check if the user already exists by email
+    //Create a user in Clerk with username and password
+    const clerkUser = await clerkClient.users.createUser({
+      emailAddress: [data.email],
+      username: data.userName,
+      password: data.password ?? "", // Handle case where password might be undefined
+      publicMetadata: {
+        role: "agent", // Add metadata with the role "agent"
+      },
+    });
+
+    //Check if the user already exists by email 
     const user = await prisma.user.findUnique({
       where: {
         Email: data.email,
       },
     });
 
+    // If user doesn't exist, create the user in Prisma database.
+    let createdUser;
     if (!user) {
-      // Create a new user if not found
-      const newUser = await prisma.user.create({
+      createdUser = await prisma.user.create({
         data: {
           Email: data.email,
           UserName: data.userName,
-          Password: data.password ?? "",
-        },
-      });
-
-      // Create the agent and add contact numbers
-      const newAgent = await prisma.agent.create({
-        data: {
-          FirstName: data.firstName,
-          LastName: data.lastName,
-          OfficeAddress: data.officeAddress,
-          HomeAddress: data.homeAddress,
-          City: data.city,
-          User: {
-            connect: { UserID: newUser.UserID },
-          },
-          Agent_Contact_Number: {
-            create: [
-              { ContactNumber: data.ContactNumber1 },
-              { ContactNumber: data.ContactNumber2 ?? "" },
-            ],
-          },
+          Password: data.password ?? "", // Password could be null or empty.
         },
       });
     } else {
-      // If user exists, just create the agent and link contact numbers
-      await prisma.agent.create({
-        data: {
-          FirstName: data.firstName,
-          LastName: data.lastName,
-          OfficeAddress: data.officeAddress,
-          HomeAddress: data.homeAddress,
-          City: data.city,
-          User: {
-            connect: { UserID: user.UserID },
-          },
-          Agent_Contact_Number: {
-            create: [
-              { ContactNumber: data.ContactNumber1 },
-              { ContactNumber: data.ContactNumber2 ?? "" },
-            ],
-          },
-        },
-      });
+      createdUser = user; // User already exists
     }
 
-   // revalidatePath("/list/agents");
+    //Create the agent in Prisma and link the Clerk user
+    const newAgent = await prisma.agent.create({
+      data: {
+        FirstName: data.firstName,
+        LastName: data.lastName,
+        OfficeAddress: data.officeAddress,
+        HomeAddress: data.homeAddress,
+        City: data.city,
+        User: {
+          connect: { UserID: createdUser.UserID }, // Link Prisma user to agent
+        },
+        Agent_Contact_Number: {
+          create: [
+            { ContactNumber: data.ContactNumber1 },
+            { ContactNumber: data.ContactNumber2 ?? "" },
+          ],
+        },
+      },
+    });
+
+    // Optional: Revalidate paths after creation (if needed)
+    // revalidatePath("/list/agents");
+
     return { success: true, error: false };
   } catch (err) {
     console.error("Create Agent Error:", err);
     return { success: false, error: true };
   }
 };
+
 
 export const updateAgent = async (currentState: CurrentState, data: AgentSchema) => {
   try {

@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X, Bell, Search, Settings } from "lucide-react";
+import { UserButton } from "@clerk/nextjs";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -86,6 +87,8 @@ const Navbar = () => {
             <button className="text-gray-700 hover:text-blue-600">
               <Settings size={24} />
             </button>
+            <UserButton/>
+
           </div>
         </div>
       </div>

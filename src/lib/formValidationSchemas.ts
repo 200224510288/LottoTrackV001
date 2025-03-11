@@ -16,8 +16,7 @@ export const agentSchema = z.object({
   password: z
     .string()
     .min(8, { message: "Password must be at least 8 characters long!" })
-    .optional()
-    .or(z.literal("")),  // optional password field (used in update)
+    .or(z.literal("")),
 
   officeAddress: z.string().min(1, { message: "Office Address is required!" }),
   homeAddress: z.string().min(1, { message: "Home Address is required!" }),
