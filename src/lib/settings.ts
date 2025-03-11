@@ -8,8 +8,10 @@ export const routeAccessMap: RouteAccessMap = {
   "/admin(.*)": ["admin"],
   "/office_staff(.*)": ["office_staff"],
   "/agent(.*)": ["agent"],
+  "/Homepage(.*)": ["agent"],
+  "/MyOrder(.*)": ["agent"],
+  "/OrderHistory(.*)": ["agent"],
   "/district_agent(.*)": ["district_agent"],
   "/list/agents": ["admin", "district_agent", "office_staff"],
-
 
 };

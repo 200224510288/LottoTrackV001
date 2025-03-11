@@ -25,6 +25,6 @@ export default function RootLayout({
       <body className={inter.className}>{children}<ToastContainer position="bottom-right" theme="dark"/>
       </body>
     </html>
-    </ClerkProvider>
+    </ ClerkProvider>
   );
 }

@@ -14,7 +14,6 @@ RUN npm install
 COPY . .
 
 # Generate Database
-RUN npx prisma migrate dev --name init
 
 # Build the Next.js application
 RUN npm run build

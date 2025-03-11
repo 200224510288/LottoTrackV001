@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from 'next/image';  // Import Image from next/image
 import Menu from '@/components/Menu';
-import Navbar from '@/components/Navbar';
+import Navbar from '@/components/Navbar(dashborad)';
 
 
 // Define the type for the props
