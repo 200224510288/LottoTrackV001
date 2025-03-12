@@ -2,7 +2,7 @@ import { z } from "zod";
 
 // Agent Schema
 export const agentSchema = z.object({
-  id: z.coerce.number().optional(),
+  id: z.coerce.string(),
   firstName: z.string().min(1, { message: "First name is required!" }),
   lastName: z.string().min(1, { message: "Last name is required!" }),
   email: z
@@ -33,7 +33,7 @@ export type AgentSchema = z.infer<typeof agentSchema>;
 
 //Staff Schema
 export const staffSchema = z.object({
-  id: z.coerce.number().optional(),
+  id: z.coerce.string().optional(),
   firstName: z.string().min(1, { message: "First name is required!" }),
   lastName: z.string().min(1, { message: "Last name is required!" }),
   email: z

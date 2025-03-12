@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  UserID   Int     @id @default(autoincrement()) 
+  UserID   String     @id
   Email    String  @unique
   UserName String
   Password String
@@ -18,7 +18,7 @@ model User {
 }
 
 model Agent {
-  AgentID       Int     @id
+  AgentID       String     @id
   FirstName     String
   LastName      String
   OfficeAddress String?
@@ -32,7 +32,7 @@ model Agent {
 }
 
 model Agent_Contact_Number {
-  AgentID       Int
+  AgentID       String
   ContactNumber String
 
   Agent         Agent    @relation(fields: [AgentID], references: [AgentID])
@@ -41,7 +41,7 @@ model Agent_Contact_Number {
 }
 
 model Staff {
-  StaffID      Int     @id
+  StaffID      String     @id
   Section      String?
   FirstName    String
   LastName     String
@@ -59,8 +59,8 @@ model Staff {
 
 model Order {
   OrderID         Int     @id @default(autoincrement())
-  AgentID         Int
-  StaffID         Int?
+  AgentID         String
+  StaffID         String?
   OrderDate       DateTime @default(now())
   OrderTime       DateTime @default(now())
   Status          String
@@ -77,7 +77,7 @@ model Order {
 
 model Delivery {
   DeliveryID    Int   @id @default(autoincrement())
-  StaffID       Int
+  StaffID       String
   OrderID       Int   @unique
   NumberPlate   String
   BusType       String?
@@ -93,7 +93,7 @@ model Delivery {
 
 model Lottery {
   LotteryID        Int     @id @default(autoincrement()) 
-  StaffID          Int
+  StaffID          String
   LotteryName      String
   DrawDate         DateTime
   UnitPrice        Float
@@ -122,7 +122,7 @@ model Order_Contain_Lottery {
 
 model Stock {
   StockID        Int  @id @default(autoincrement())
-  StaffID        Int
+  StaffID        String
   LotteryID      Int  @unique
   Availability   Boolean
   LastUpdateDate DateTime @default(now())

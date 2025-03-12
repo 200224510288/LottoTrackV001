@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "User" (
-    "UserID" SERIAL NOT NULL,
+    "UserID" TEXT NOT NULL,
     "Email" TEXT NOT NULL,
     "UserName" TEXT NOT NULL,
     "Password" TEXT NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Agent" (
-    "AgentID" INTEGER NOT NULL,
+    "AgentID" TEXT NOT NULL,
     "FirstName" TEXT NOT NULL,
     "LastName" TEXT NOT NULL,
     "OfficeAddress" TEXT,
@@ -22,7 +22,7 @@ CREATE TABLE "Agent" (
 
 -- CreateTable
 CREATE TABLE "Agent_Contact_Number" (
-    "AgentID" INTEGER NOT NULL,
+    "AgentID" TEXT NOT NULL,
     "ContactNumber" TEXT NOT NULL,
 
     CONSTRAINT "Agent_Contact_Number_pkey" PRIMARY KEY ("AgentID","ContactNumber")
@@ -30,7 +30,7 @@ CREATE TABLE "Agent_Contact_Number" (
 
 -- CreateTable
 CREATE TABLE "Staff" (
-    "StaffID" INTEGER NOT NULL,
+    "StaffID" TEXT NOT NULL,
     "Section" TEXT,
     "FirstName" TEXT NOT NULL,
     "LastName" TEXT NOT NULL,
@@ -42,8 +42,8 @@ CREATE TABLE "Staff" (
 -- CreateTable
 CREATE TABLE "Order" (
     "OrderID" SERIAL NOT NULL,
-    "AgentID" INTEGER NOT NULL,
-    "StaffID" INTEGER,
+    "AgentID" TEXT NOT NULL,
+    "StaffID" TEXT,
     "OrderDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "OrderTime" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "Status" TEXT NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE "Order" (
 -- CreateTable
 CREATE TABLE "Delivery" (
     "DeliveryID" SERIAL NOT NULL,
-    "StaffID" INTEGER NOT NULL,
+    "StaffID" TEXT NOT NULL,
     "OrderID" INTEGER NOT NULL,
     "NumberPlate" TEXT NOT NULL,
     "BusType" TEXT,
@@ -69,7 +69,7 @@ CREATE TABLE "Delivery" (
 -- CreateTable
 CREATE TABLE "Lottery" (
     "LotteryID" SERIAL NOT NULL,
-    "StaffID" INTEGER NOT NULL,
+    "StaffID" TEXT NOT NULL,
     "LotteryName" TEXT NOT NULL,
     "DrawDate" TIMESTAMP(3) NOT NULL,
     "UnitPrice" DOUBLE PRECISION NOT NULL,
@@ -91,7 +91,7 @@ CREATE TABLE "Order_Contain_Lottery" (
 -- CreateTable
 CREATE TABLE "Stock" (
     "StockID" SERIAL NOT NULL,
-    "StaffID" INTEGER NOT NULL,
+    "StaffID" TEXT NOT NULL,
     "LotteryID" INTEGER NOT NULL,
     "Availability" BOOLEAN NOT NULL,
     "LastUpdateDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

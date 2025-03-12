@@ -37,7 +37,7 @@ const StaffForm = ({
   const onSubmit = handleSubmit((formData) => {
     if (type === "update" && !data?.StaffID) {
       console.error("StaffID is missing in update mode!");
-      toast.error("Error: Agent ID is missing.");
+      toast.error("Error: Staff ID is missing.");
       return;
     }
   

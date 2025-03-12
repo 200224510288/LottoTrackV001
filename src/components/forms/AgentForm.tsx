@@ -48,13 +48,19 @@ const AgentForm = ({
 
 const router = useRouter();
 
-  useEffect(() => {
-    if (state.success) {
-      toast(`Agent has been ${type === "create" ? "created" : "updated"}!`);
-      setOpen(false);
-      router.refresh();
-    }
-  }, [router, setOpen, state, type]);
+useEffect(() => {
+  if (state.success) {
+    toast(`Agent has been ${type === "create" ? "created" : "updated"}!`);
+    setOpen(false);
+    router.refresh();
+  }
+
+  // Display the error message from the backend (Clerk or Prisma)
+  if (state.error) {
+    toast.error(state.message || "Something went wrong!");
+  }
+}, [router, setOpen, state, type]);
+
   
 
   return (
@@ -151,7 +157,7 @@ const router = useRouter();
 />
 
       </div>
-        {state.error && <span className="text-red-500 font-semibold">Something went wrong!</span>}
+      {state.error && <span className="text-red-500 font-semibold">{state.message || "Something went wrong!"}</span>}
       <button className="bg-blue-400 text-white p-2 rounded-md mt-4">
         {type === "create" ? "Create" : "Update"}
       </button>
