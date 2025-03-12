@@ -129,15 +129,16 @@ export default function Home() {
           </button>
         </div>
 
+
         <h1 className="font-bold text-3xl mt-10 mb-10 ml-10 text-gray-600">NLB TICKETS</h1>
         
 
         <div className="overflow-x-auto mb-20 ml-10">
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-3 gap-16">
             {nlbtickets.map((nlbticket) => (
               <div
                 key={nlbticket.name}
-                className="w-full h-70 bg-white rounded-lg shadow-md text-center relative overflow-hidden border border-black"
+                className="w-full h-50 bg-white rounded-lg shadow-md text-center relative overflow-hidden border border-black"
               >
                 <img
                   src={nlbticket.image}
@@ -148,7 +149,7 @@ export default function Home() {
                   <p className="text-md text-gray-600 pr-18 pl-4">
                     {nlbticket.status}
                   </p>
-                  <button className="px-2.5 bg-gray-300 rounded-full">-</button>
+                  <button className="px-2 bg-gray-300 rounded-full">-</button>
                   <span className="text-md font-bold">
                     {nlbticket.quantity}
                   </span>
@@ -162,7 +163,7 @@ export default function Home() {
         <h1 className="font-bold text-3xl mt-10 mb-10 ml-10">DLB TICKETS</h1>
 
         <div className="overflow-x-auto mb-20 ml-10">
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-3 gap-16">
             {dlbtickets.map((dlbticket) => (
               <div
                 key={dlbticket.name}
@@ -177,7 +178,7 @@ export default function Home() {
                   <p className="text-md text-gray-600 pr-18 pl-4">
                     {dlbticket.status}
                   </p>
-                  <button className="px-2.5 bg-gray-300 rounded-full">-</button>
+                  <button className="px-2 bg-gray-300 rounded-full">-</button>
                   <span className="text-md font-bold">
                     {dlbticket.quantity}
                   </span>
