@@ -1,5 +1,5 @@
 "use client"
-import { createAgent, deleteAgent, deleteStaff, updateAgent } from '@/lib/actions';
+import { createAgent, deleteAgent, deleteLottery, deleteStaff, updateAgent } from '@/lib/actions';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';  // Import Image from next/image
 import { useRouter } from 'next/navigation';
@@ -14,6 +14,7 @@ import { FormContainerProps } from './FormContainer';
 const deleteActionMap = {
   agent: deleteAgent,
   staff: deleteStaff,
+  lottery: deleteLottery,
 }
 
 const AgentForm = dynamic(()=>import('./forms/AgentForm'),{
@@ -24,6 +25,10 @@ const StaffForm = dynamic(()=>import('./forms/StaffForm'),{
   loading: ()=><h1>Loading...</h1>
 })
 
+const LotteryForm = dynamic(()=>import('./forms/LotteryForm'),{
+  loading: ()=><h1>Loading...</h1>
+})
+
 
 const forms:{
     [key:string]:(setOpen:Dispatch<SetStateAction<boolean>>, type:"create" | "update",data?:any)=> JSX.Element;
@@ -31,6 +36,7 @@ const forms:{
 } = {
     agent: (setOpen, type, data) => <AgentForm type={type} data={data} setOpen={setOpen} />,
     staff: (setOpen, type, data) => <StaffForm type={type} data={data} setOpen={setOpen} />,
+    lottery: (setOpen, type, data) => <LotteryForm type={type} data={data} setOpen={setOpen} />,
 };
 
 

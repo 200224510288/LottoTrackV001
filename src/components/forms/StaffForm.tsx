@@ -6,9 +6,10 @@ import InputField from "../InputField";
 import {StaffSchema, staffSchema } from "@/lib/formValidationSchemas";
 import {createStaff, updateStaff } from "@/lib/actions";
 import { useFormState } from "react-dom";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const StaffForm = ({ 
   type,
@@ -33,6 +34,7 @@ const StaffForm = ({
     type === "create" ? createStaff : updateStaff, 
     { success: false, error: false }
   );
+    const [passwordVisible, setPasswordVisible] = useState(false); 
 
   const onSubmit = handleSubmit((formData) => {
     if (type === "update" && !data?.StaffID) {
@@ -82,14 +84,25 @@ const router = useRouter();
           error={errors?.email}
         />
 
-        <InputField
-          label="Password"
-          name="password"
-          type="password"
-          defaultValue={data?.User.Password}
-          register={register}
-          error={errors?.password}
-        />
+<InputField
+            label="Password"
+            name="password"
+            type={passwordVisible ? "text" : "password"}
+            defaultValue={data?.User.Password}
+            register={register}
+            error={errors?.password}
+          />
+          <button
+            type="button"
+            className="absolute right-5 top-40 transform -translate-y-1/2"
+            onClick={() => setPasswordVisible((prev) => !prev)}
+          >
+            {passwordVisible ? (
+              <FaEyeSlash size={20} />
+            ) : (
+              <FaEye size={20} />
+            )}
+          </button>
       </div>
 
       <span className="text-xs text-gray-400 font-medium">Personal Information</span>

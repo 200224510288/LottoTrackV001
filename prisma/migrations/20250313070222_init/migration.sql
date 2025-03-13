@@ -71,6 +71,7 @@ CREATE TABLE "Lottery" (
     "LotteryID" SERIAL NOT NULL,
     "StaffID" TEXT NOT NULL,
     "LotteryName" TEXT NOT NULL,
+    "ImageUrl" TEXT NOT NULL,
     "DrawDate" TIMESTAMP(3) NOT NULL,
     "UnitPrice" DOUBLE PRECISION NOT NULL,
     "UnitCommission" DOUBLE PRECISION NOT NULL,
@@ -90,9 +91,8 @@ CREATE TABLE "Order_Contain_Lottery" (
 
 -- CreateTable
 CREATE TABLE "Stock" (
-    "StockID" SERIAL NOT NULL,
+    "StockID" INTEGER NOT NULL,
     "StaffID" TEXT NOT NULL,
-    "LotteryID" INTEGER NOT NULL,
     "Availability" BOOLEAN NOT NULL,
     "LastUpdateDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -104,9 +104,6 @@ CREATE UNIQUE INDEX "User_Email_key" ON "User"("Email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Delivery_OrderID_key" ON "Delivery"("OrderID");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Stock_LotteryID_key" ON "Stock"("LotteryID");
 
 -- AddForeignKey
 ALTER TABLE "Agent" ADD CONSTRAINT "Agent_AgentID_fkey" FOREIGN KEY ("AgentID") REFERENCES "User"("UserID") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -142,4 +139,4 @@ ALTER TABLE "Order_Contain_Lottery" ADD CONSTRAINT "Order_Contain_Lottery_OrderI
 ALTER TABLE "Stock" ADD CONSTRAINT "Stock_StaffID_fkey" FOREIGN KEY ("StaffID") REFERENCES "Staff"("StaffID") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Stock" ADD CONSTRAINT "Stock_LotteryID_fkey" FOREIGN KEY ("LotteryID") REFERENCES "Lottery"("LotteryID") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Stock" ADD CONSTRAINT "Stock_StockID_fkey" FOREIGN KEY ("StockID") REFERENCES "Lottery"("LotteryID") ON DELETE RESTRICT ON UPDATE CASCADE;

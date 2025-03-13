@@ -1,14 +1,15 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm} from "react-hook-form";
-import InputField from "../InputField"; 
+import { useForm } from "react-hook-form";
+import InputField from "../InputField";
 import { agentSchema, AgentSchema } from "@/lib/formValidationSchemas";
 import { createAgent, updateAgent } from "@/lib/actions";
 import { useFormState } from "react-dom";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const AgentForm = ({ 
   type,
@@ -33,6 +34,9 @@ const AgentForm = ({
     type === "create" ? createAgent : updateAgent, 
     { success: false, error: false }
   );
+
+  //const [passwordVisible, setPasswordVisible] = useState(false); 
+
 
   const onSubmit = handleSubmit((formData) => {
     if (type === "update" && !data?.AgentID) {
@@ -88,16 +92,16 @@ useEffect(() => {
           error={errors?.email}
         />
 
-        <InputField
-          label="Password"
-          name="password"
-          type="password"
-          defaultValue={data?.User.Password}
-          register={register}
-          error={errors?.password}
-        />
+          <InputField
+            label="Password"
+            name="password"
+            type="password"
+            defaultValue={data?.User.Password}
+            register={register}
+            error={errors?.password}
+          />
+        
       </div>
-
       <span className="text-xs text-gray-400 font-medium">Personal Information</span>
 
       <div className="flex justify-between flex-wrap gap-4">
@@ -150,7 +154,7 @@ useEffect(() => {
 
 <InputField
   label="Contact Number 2"
-  name="ContactNumber2" // Match Zod schema
+  name="ContactNumber2"
   defaultValue={data?.Agent_Contact_Number?.[1]?.ContactNumber || ""}
   register={register}
   error={errors.ContactNumber2}

@@ -19,7 +19,7 @@ const AgentListPage = async ({ searchParams }: { searchParams: { [key: string]: 
 
   // URL PARAMS CONDITION
   const query: Prisma.AgentWhereInput = {};
-
+ 
   if (queryParams.search) {
     query.OR = [
       { FirstName: { contains: queryParams.search, mode: "insensitive" } },

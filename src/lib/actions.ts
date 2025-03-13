@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { AgentSchema, StaffSchema, staffSchema } from "./formValidationSchemas";
+import { AgentSchema, LotterySchema, StaffSchema, staffSchema } from "./formValidationSchemas";
 import { clerkClient } from "@clerk/clerk-sdk-node"; // Clerk SDK for Node.js
 import prisma from "./prisma";
 import { error } from "console";
@@ -181,7 +181,7 @@ export const createStaff = async (currentState: CurrentState, data: StaffSchema)
       username: data.userName,
       password: data.password ?? "", // Handle case where password might be undefined
       publicMetadata: {
-        role: "staff", // Add metadata with the role "staff"
+        role: "office_staff", // Add metadata with the role "staff"
       },
     });
 
@@ -305,6 +305,136 @@ export const deleteStaff = async (currentState: CurrentState, data: FormData) =>
     console.error("Deletion failed:", err);
 
     // Check if the error is from Clerk (and capture the message)
+    const errorMessages = err.errors?.map((e: any) => e.message).join(" ") || "An unknown error occurred.";
+    
+    return { success: false, error: true, message: errorMessages };
+  }
+}; 
+
+
+
+export const createLottery = async (data: LotterySchema) => {
+  try {
+    // Create the lottery and stock entry in a single transaction
+    const result = await prisma.$transaction(async (tx) => {
+      // Step 1: Create the lottery entry
+      const newLottery = await tx.lottery.create({
+        data: {
+          StaffID: data.StaffID,
+          LotteryName: data.LotteryName,
+          ImageUrl: data.ImageUrl,
+          DrawDate: data.DrawDate,
+          UnitPrice: data.UnitPrice,
+          UnitCommission: data.UnitCommission,
+          LastUpdateDate: data.LastUpdateDate ?? new Date(),
+        },
+      });
+
+      // Step 2: Create the stock entry
+      const newStock = await tx.stock.create({
+        data: {
+          StockID: newLottery.LotteryID, // Use the LotteryID as StockID
+          StaffID: data.StaffID,
+          Availability: data.Availability,
+          LastUpdateDate: new Date(),
+        },
+      });
+
+      // Return the created records
+      return { newLottery, newStock };
+    });
+
+    return { success: true, error: false, lottery: result.newLottery, stock: result.newStock };
+  } catch (err: any) {
+    console.error("Create Lottery & Stock Error:", err);
+    const errorMessages =
+      err.errors?.map((e: any) => e.message).join(" ") || "An unknown error occurred.";
+    return { success: false, error: true, message: errorMessages };
+  }
+};
+
+
+
+export const updateLottery = async (data: LotterySchema) => {
+  try {
+    // Ensure LotteryID is defined
+    if (!data.LotteryID) {
+      throw new Error("Lottery ID is required for updating.");
+    }
+
+    const lotteryID = Number(data.LotteryID);
+    if (isNaN(lotteryID)) {
+      throw new Error("Invalid Lottery ID.");
+    }
+
+    // Perform the update in a single transaction
+    const result = await prisma.$transaction(async (tx) => {
+      // Step 1: Update the lottery entry
+      const updatedLottery = await tx.lottery.update({
+        where: { LotteryID: lotteryID },
+        data: {
+          LotteryName: data.LotteryName,
+          ImageUrl: data.ImageUrl,
+          DrawDate: data.DrawDate,
+          UnitPrice: data.UnitPrice,
+          UnitCommission: data.UnitCommission,
+          LastUpdateDate: new Date(),
+        },
+      });
+
+      // Step 2: Update the stock entry
+      const updatedStock = await tx.stock.update({
+        where: { StockID: lotteryID },
+        data: {
+          StaffID: data.StaffID,
+          Availability: data.Availability,
+          LastUpdateDate: new Date(),
+        },
+      });
+
+      // Return the updated records
+      return { updatedLottery, updatedStock };
+    });
+
+    return { success: true, error: false, lottery: result.updatedLottery, stock: result.updatedStock };
+  } catch (err: any) {
+    console.error("Update Lottery Error:", err);
+    const errorMessages =
+      err.errors?.map((e: any) => e.message).join(" ") || "An unknown error occurred.";
+    return { success: false, error: true, message: errorMessages };
+  }
+};
+
+
+
+export const deleteLottery = async (currentState: CurrentState, data: FormData) => {
+  const id = data.get("id") as string;
+
+  try {
+    // Check if id is provided and is a valid string 
+    if (!id) {
+      return { success: false, error: true, message: "Lottery ID is required." };
+    }
+
+    // Perform the deletion in Prisma and Clerk using a transaction
+    await prisma.$transaction([
+      // Delete the staff from Prisma
+      prisma.lottery.delete({
+        where: { LotteryID: Number(id) },
+      }),
+
+      // Delete the user from Prisma
+      prisma.stock.delete({
+        where: { StockID: Number(id) },
+      }),
+    ]);
+
+
+    // revalidatePath("/list/staff");
+
+    return { success: true, error: false };
+  } catch (err: any) {
+    console.error("Deletion failed:", err);
     const errorMessages = err.errors?.map((e: any) => e.message).join(" ") || "An unknown error occurred.";
     
     return { success: false, error: true, message: errorMessages };

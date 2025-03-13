@@ -95,14 +95,14 @@ model Lottery {
   LotteryID        Int     @id @default(autoincrement()) 
   StaffID          String
   LotteryName      String
+  ImageUrl         String
   DrawDate         DateTime
   UnitPrice        Float
   UnitCommission   Float
   LastUpdateDate   DateTime @default(now())
-
+  Stock            Stock?
   Staff            Staff   @relation(fields: [StaffID], references: [StaffID])
   ContainedOrders  Order_Contain_Lottery[]
-  Stock            Stock[]
 
 }
 
@@ -121,13 +121,11 @@ model Order_Contain_Lottery {
 }
 
 model Stock {
-  StockID        Int  @id @default(autoincrement())
+  StockID        Int     @id
   StaffID        String
-  LotteryID      Int  @unique
-  Availability   Boolean
+  Availability   String
   LastUpdateDate DateTime @default(now())
 
   Staff          Staff   @relation(fields: [StaffID], references: [StaffID])
-  Lottery        Lottery @relation(fields: [LotteryID], references: [LotteryID])
-
+  Lottery        Lottery @relation(fields: [StockID], references: [LotteryID])
 }

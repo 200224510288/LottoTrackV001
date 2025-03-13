@@ -13,6 +13,7 @@ export const routeAccessMap: RouteAccessMap = {
   "/OrderHistory(.*)": ["agent"],
   "/district_agent(.*)": ["district_agent"],
   "/list/agents": ["admin", "district_agent", "office_staff"],
+  "/list/lotteries": ["admin", "district_agent", "office_staff"],
   "/list/staff": ["admin", "district_agent"],
 
 };
