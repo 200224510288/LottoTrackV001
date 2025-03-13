@@ -43,7 +43,7 @@ const AgentListPage = async ({ searchParams }: { searchParams: { [key: string]: 
   ]);
 
   const columns = [
-    { header: "Agent Name", accessor: "agent" },
+    { header: "Agent Name", accessor: "agent",className:"ml-20" },
     { header: "Email", accessor: "User.Email", className: "hidden md:table-cell" },
     { header: "User Name", accessor: "User.UserName", className: "hidden md:table-cell" },
     { header: "Contact Numbers", accessor: "contactNumbers", className: "hidden md:table-cell" },
@@ -56,22 +56,22 @@ const AgentListPage = async ({ searchParams }: { searchParams: { [key: string]: 
   ];
 
   const renderRow = (item: AgentList) => (
-    <tr key={item.AgentID} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-PurpleLight">
-      <td className="p-4 font-semibold">{item.FirstName || "N/A"} {item.LastName || "N/A"}</td>
-      <td className="hidden md:table-cell">{item.User?.Email || "N/A"}</td>
-      <td className="hidden md:table-cell">{item.User?.UserName || "N/A"}</td>
-      <td className="hidden md:table-cell">
+    <tr key={item.AgentID} className="border-b  border-gray-200  even:bg-slate-50 text-sm hover:bg-[#6BAFB3]/30">
+      <td className="font-semibold pl-2 py-4">{item.FirstName || "N/A"} {item.LastName || "N/A"}</td>
+      <td className="hidden pl-4 md:table-cell">{item.User?.Email || "N/A"}</td>
+      <td className="hidden pl-4 md:table-cell">{item.User?.UserName || "N/A"}</td>
+      <td className="hidden pl-4 md:table-cell">
         {item.Agent_Contact_Number?.length
           ? item.Agent_Contact_Number.map((cn) => cn.ContactNumber).join(", ")
           : "N/A"}
       </td>
-      <td className="hidden md:table-cell">{item.OfficeAddress || "N/A"}</td>
-      <td className="hidden md:table-cell">{item.HomeAddress || "N/A"}</td>
-      <td className="hidden md:table-cell">{item.City || "N/A"}</td>
+      <td className="hidden pl-4 md:table-cell">{item.OfficeAddress || "N/A"}</td>
+      <td className="hidden pl-4 md:table-cell">{item.HomeAddress || "N/A"}</td>
+      <td className="hidden pl-4 md:table-cell">{item.City || "N/A"}</td>
       {role && (
         <td>
-          <div className="flex items-center gap-2">
-            <FormModal table="agent" type="update" id={item.AgentID} data={item} />
+          <div className="flex pl-4 items-center gap-2">
+          <FormModal table="agent" type="update" id={item.AgentID} data={item} />
             {(role === "admin" || role === "district_agent") && <FormModal table="agent" type="delete" id={item.AgentID} />}
           </div>
         </td>
@@ -82,7 +82,7 @@ const AgentListPage = async ({ searchParams }: { searchParams: { [key: string]: 
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
       <div className="flex items-center justify-between">
-        <h1 className="hidden md:block text-lg font-semibold">All Agents</h1>
+        <h1 className="hidden md:block text-lg font-semibold ml-4 mt-3">All Agents</h1>
         <div className="flex items-center gap-4">
           <TableSearch />
           <FormModal table="agent" type="create" />

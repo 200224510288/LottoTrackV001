@@ -68,32 +68,34 @@ useEffect(() => {
   
 
   return (
-    <form className="flex flex-col gap-8" onSubmit={onSubmit}>
-      <h1 className="text-xl font-semibold">
+    <form className="flex flex-col gap-4" onSubmit={onSubmit}>
+      <h1 className="text-xl text-gray-700 font-semibold text-center w-full">
         {type === "create" ? "Create a new Agent" : "Update Agent"}
       </h1>
-      <span className="text-xs text-gray-400 font-medium">Authentication Information</span>
-
-      <div className="flex justify-between flex-wrap gap-4"> 
+      <span className="text-s text-gray-400 font-medium">Authentication Information</span>
+      <div className="grid grid-cols-2 items-center gap-1 "> 
+      <label className="text-xs text-gray-500 ">Username</label>
         <InputField
-          label="Username"
+          label=""
           name="userName"
           defaultValue={data?.User.UserName}
           register={register}
           error={errors?.userName}
+          
+          
         />
-
+        <label className="text-xs text-gray-500">Email</label>
         <InputField
-          label="Email"
+          label=""
           name="email"
           type="email"
           defaultValue={data?.User.Email}
           register={register}
           error={errors?.email}
         />
-
+        <label className="text-xs text-gray-500">Password</label>
           <InputField
-            label="Password"
+            label=""
             name="password"
             type="password"
             defaultValue={data?.User.Password}
@@ -102,9 +104,9 @@ useEffect(() => {
           />
         
       </div>
-      <span className="text-xs text-gray-400 font-medium">Personal Information</span>
+      <span className="text-s text-gray-400 font-medium">Personal Information</span>
 
-      <div className="flex justify-between flex-wrap gap-4">
+      <div className="flex justify-between gap-4">
         <InputField
           label="First Name"
           name="firstName"
@@ -120,7 +122,9 @@ useEffect(() => {
           register={register}
           error={errors.lastName}
         />
-
+      </div>
+      <span className="text-s text-gray-400 font-medium">Address</span>
+      <div className="flex justify-between gap-4">
         <InputField
           label="Office Address"
           name="officeAddress"
@@ -144,27 +148,33 @@ useEffect(() => {
           register={register}
           error={errors.city}
         />
+       </div>
+       <span className="text-s text-gray-400 font-medium">Contact Details</span>
+      <div className="flex justify-between gap-4">
      <InputField
-  label="Contact Number 1"
-  name="ContactNumber1" // Match Zod schema
-  defaultValue={data?.Agent_Contact_Number?.[0]?.ContactNumber || ""}
-  register={register}
-  error={errors.ContactNumber1}
-/>
+        label="Contact Number 1"
+        name="ContactNumber1" // Match Zod schema
+        defaultValue={data?.Agent_Contact_Number?.[0]?.ContactNumber || ""}
+        register={register}
+        error={errors.ContactNumber1}
+      />
 
-<InputField
-  label="Contact Number 2"
-  name="ContactNumber2"
-  defaultValue={data?.Agent_Contact_Number?.[1]?.ContactNumber || ""}
-  register={register}
-  error={errors.ContactNumber2}
-/>
-
-      </div>
+      <InputField
+        label="Contact Number 2 (optional)"
+        name="ContactNumber2"
+        defaultValue={data?.Agent_Contact_Number?.[1]?.ContactNumber || ""}
+        register={register}
+        error={errors.ContactNumber2}
+      />
+</div>
+    
       {state.error && <span className="text-red-500 font-semibold">{state.message || "Something went wrong!"}</span>}
-      <button className="bg-blue-400 text-white p-2 rounded-md mt-4">
+      <div className="flex justify-center items-center">
+      <button className="bg-DashboardBlue text-white p-2 rounded-md mt-4 w-1/3">
         {type === "create" ? "Create" : "Update"}
       </button>
+    </div>
+
     </form>
   );
 };

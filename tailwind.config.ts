@@ -20,7 +20,8 @@ const config: Config = {
         PurpleLight: "#F1F0FF",
         Yellow: "#FAE27C",
         YellowLight: "#FEFCE8",
-        NavBlue : "#0743aa"
+        NavBlue : "#0743aa",
+        DashboardBlue : "#062855"
       }
     },
   },

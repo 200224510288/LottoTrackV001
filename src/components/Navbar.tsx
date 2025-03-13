@@ -78,7 +78,7 @@ const Navbar = () => {
               <Settings size={24} />
             </button>
             <UserButton/>
-
+    
           </div>
         </div>
       </div>
