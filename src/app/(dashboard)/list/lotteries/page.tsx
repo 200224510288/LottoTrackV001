@@ -49,7 +49,7 @@ const LotteryListPage = async ({ searchParams }: { searchParams: { [key: string]
     { header: "Image URL", accessor: "ImageUrl", className: "hidden md:table-cell" },
     { header: "Availability", accessor: "Stock.Availability", className: "hidden md:table-cell" },
     { header: "Last Update", accessor: "LastUpdateDate", className: "hidden md:table-cell" },
-    { header: "Staff ID", accessor: "Staff.StaffID", className: "hidden md:table-cell" },
+    { header: "Staff Name", accessor: "Staff.StaffID", className: "hidden md:table-cell" },
     ...(role === "admin" || role === "district_agent" || role === "office_staff"
       ? [{ header: "Actions", accessor: "actions" }]
       : []),
@@ -76,7 +76,7 @@ const LotteryListPage = async ({ searchParams }: { searchParams: { [key: string]
        </td>
 
       <td className="hidden md:table-cell">{item.LastUpdateDate ? new Date(item.LastUpdateDate).toLocaleDateString() : "N/A"}</td>
-      <td className="hidden md:table-cell">{item.Staff?.StaffID || "N/A"}</td>
+      <td className="hidden md:table-cell">{item.Staff?.FirstName || "N/A"}</td>
 
       {role && (
         <td>

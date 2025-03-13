@@ -9,6 +9,7 @@ import { useState } from "react";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import SelectField from "../SelectField";
 
 const LotteryForm = ({
   type,
@@ -134,12 +135,17 @@ const LotteryForm = ({
           error={errors.UnitCommission}
         />
 
-        <InputField
-          label="Availability"
-          name="Availability"
-          register={register}
-          error={errors.Availability}
-        />
+<SelectField
+  label="Availability"
+  name="Availability"
+  register={register}
+  error={errors.Availability}
+  options={[
+    { value: "Available", label: "Available" },
+    { value: "Unavailable", label: "Unavailable" },
+  ]}
+/>
+
       </div>
 
       {state.error && (
