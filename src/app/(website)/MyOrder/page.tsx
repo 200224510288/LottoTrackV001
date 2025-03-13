@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import Navbar from "@/components/Navbar";
+import Cart from "@/components/Cart";
 import { Bus } from 'lucide-react';
 
 interface Order {
@@ -78,9 +79,11 @@ export default function MyOrder() {
       </Head>
 
       {/* Setting the background image */}
-      <div className="min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('/bg.png')" }}>
+      <div className="min-h-screen bg-cover bg-center overflow-hidden" style={{ backgroundImage: "url('/bg.png')" }}>
         {/* Navbar */}
         <Navbar />
+        <Cart />
+
         <h1 className="font-bold text-3xl mt-24 mb-10 ml-16 text-gray-600">MY ORDER</h1>
 
         {/* New Box on Top */}
@@ -93,7 +96,7 @@ export default function MyOrder() {
         </div>
 
         {/* Flex container for the order boxes */}
-        <div className="flex gap-8 mx-16 mb-16 flex-wrap">
+        <div className="flex gap-8 mx-16 mb-16 flex-wrap w-2/3">
           <div className="flex-1 bg-gray-200 p-8 rounded-lg shadow-lg overflow-y-auto max-h-80">
             <h2 className="text-xl font-semibold mb-5 text-gray-600">Ongoing Orders</h2>
             {ongoingOrders === null ? (

@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X, Bell, Search, Settings } from "lucide-react";
+import { UserButton } from "@clerk/nextjs";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -52,16 +53,6 @@ const Navbar = () => {
               My Order
             </Link>
 
-            <Link
-              href="/StockAvailability"
-              className={`text-gray-700 p-5 hover:text-NavBlue ${
-                pathname === "/" || pathname.startsWith("/StockAvailability")
-                  ? "bg-NavBlue p-5 rounded text-white font-semibold border-b-2 border-blue-700 hover:text-white"
-                  : ""
-              }`}
-            >
-              Stock Availability
-            </Link>
 
             <Link
               href="/OrderHistory"
@@ -86,6 +77,8 @@ const Navbar = () => {
             <button className="text-gray-700 hover:text-blue-600">
               <Settings size={24} />
             </button>
+            <UserButton/>
+
           </div>
         </div>
       </div>
