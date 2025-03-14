@@ -1,11 +1,15 @@
 import { UserButton } from '@clerk/nextjs';
 import { currentUser } from '@clerk/nextjs/server';
 import Image from 'next/image';
+import LotteryForm from './forms/LotteryForm';
 
+export const getUserData = async () => {
+  const user = await currentUser();
+  return user;
+};
 
 const Navbar = async () => {
-  const user = await currentUser();
-  
+  const user = await getUserData();
 
   return (
     <div className='flex items-center justify-between p-4'>
@@ -15,26 +19,18 @@ const Navbar = async () => {
         <input 
           type='text' 
           placeholder='Search...' 
-          className='w-[200px] p-2 bg-transparent outline-none' // Added some styling for the input
+          className='w-[200px] p-2 bg-transparent outline-none'
         />
       </div>
 
       {/* Icons And USERS */}
       <div className='flex items-center gap-4 justify-end w-full'>
-       
-        
-
-      
-
         <div className='flex flex-col'>
-          <span className='text-sm'>John Doe</span>
+          <span className='text-xs text-gray-500 text-right'>{user?.username}</span>
           <span className='text-xs text-gray-500 text-right'>{user?.publicMetadata.role as string}</span>
         </div>
 
-        {/* <Image src="/avatar.png" alt="" width={36} height={36} className='rounded-full'/>     */}
-
-        <UserButton/>
-      
+        <UserButton />
       </div>
     </div>
   );

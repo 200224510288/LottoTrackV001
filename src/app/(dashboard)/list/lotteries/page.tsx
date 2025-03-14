@@ -4,14 +4,17 @@ import TableSearch from "@/components/TableSearch";
 import prisma from "@/lib/prisma";
 import { Prisma, Lottery, Stock, Staff } from "@prisma/client";
 import { ITEM_PER_PAGE } from "@/lib/settings";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import FormModal from "@/components/FormModal";
 import Image from "next/image";
 
-
 type LotteryList = Lottery & { Stock: Stock; Staff: Staff }; 
 
+const user = await currentUser();
+
+
 const LotteryListPage = async ({ searchParams }: { searchParams: { [key: string]: string | undefined } }) => {
+
   const { sessionClaims } = await auth();
   const role = (sessionClaims?.metadata as { role?: string })?.role;
 

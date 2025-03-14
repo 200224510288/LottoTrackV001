@@ -1,5 +1,6 @@
 "use client";
 
+import { useUser } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "../InputField";
@@ -22,25 +23,29 @@ const LotteryForm = ({
   data?: any;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
+  const { user } = useUser();
+
+  console.log("Username:", user?.username);
+  console.log("Role:", user?.publicMetadata.role);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setValue, // to update the form field programmatically
+    setValue,
   } = useForm<LotterySchema>({
     resolver: zodResolver(lotterySchema),
     defaultValues: {
-      StaffID: data?.StaffID || "",
+      StaffID: user?.id || data?.StaffID || "", // Pre-fill StaffID with username
       LotteryName: data?.LotteryName || "",
-      ImageUrl: data?.ImageUrl || "", // Ensure ImageUrl is populated on load
-      DrawDate: data?.DrawDate ? new Date(data.DrawDate) : undefined,
-      UnitPrice: data?.UnitPrice || 0,
-      UnitCommission: data?.UnitCommission || 0,
+      ImageUrl: data?.ImageUrl || "",
+      DrawDate: data?.DrawDate ? new Date(data.DrawDate) : new Date(),
+      UnitPrice: data?.UnitPrice || 34,
+      UnitCommission: data?.UnitCommission || 6,
       Availability: data?.Availability || "Available",
     },
   });
 
-  // Handle form state with create or update action
   const [state, setState] = useState({ success: false, error: false, message: "" });
 
   const formAction = async (payload: any) => {
@@ -63,7 +68,7 @@ const LotteryForm = ({
       return;
     }
 
-    const payload = { ...formData, LotteryID: data?.LotteryID }; // Include LotteryID for update
+    const payload = { ...formData, LotteryID: data?.LotteryID };
     formAction(payload);
   });
 
@@ -102,6 +107,7 @@ const LotteryForm = ({
           name="StaffID"
           register={register}
           error={errors.StaffID}
+          inputProps={{ disabled: true }}
         />
 
         <InputField
@@ -109,6 +115,7 @@ const LotteryForm = ({
           name="ImageUrl"
           register={register}
           error={errors.ImageUrl}
+          inputProps={{ disabled: true, placeholder: "Image URL will be set after upload" }}
         />
 
         <InputField
@@ -145,8 +152,7 @@ const LotteryForm = ({
             { value: "Unavailable", label: "Unavailable" },
           ]}
         />
-
-        <CldUploadWidget
+       <CldUploadWidget
           uploadPreset="LottoTrack" // Cloudinary upload preset
           onSuccess={(result) => {
             if (result?.info && typeof result.info !== 'string') { 

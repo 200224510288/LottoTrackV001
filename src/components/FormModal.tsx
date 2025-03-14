@@ -62,7 +62,7 @@ const FormModal = ({
 
     useEffect(() => {
       if (state.success) {
-        toast(`Agent has been deleted!`);
+        toast(`${table} has been deleted!`);
         setOpen(false);
         router.refresh();
       }
