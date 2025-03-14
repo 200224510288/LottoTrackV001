@@ -6,6 +6,8 @@ import { Prisma, Lottery, Stock, Staff } from "@prisma/client";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import { auth } from "@clerk/nextjs/server";
 import FormModal from "@/components/FormModal";
+import Image from "next/image";
+
 
 type LotteryList = Lottery & { Stock: Stock; Staff: Staff }; 
 
@@ -39,9 +41,9 @@ const LotteryListPage = async ({ searchParams }: { searchParams: { [key: string]
     prisma.lottery.count({ where: query }),
   ]);
 
-  console.log(data);
 
   const columns = [
+    { header: "Lottery Image", accessor: "LotteryImage" },
     { header: "Lottery Name", accessor: "LotteryName" },
     { header: "Draw Date", accessor: "DrawDate", className: "hidden md:table-cell" },
     { header: "Unit Price", accessor: "UnitPrice", className: "hidden md:table-cell" },
@@ -57,19 +59,30 @@ const LotteryListPage = async ({ searchParams }: { searchParams: { [key: string]
 
   const renderRow = (item: LotteryList) => (
     <tr key={item.LotteryID} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-PurpleLight">
+      <td className="flex items-center gap-4 p-4">
+        <Image
+          src={item.ImageUrl}
+          alt=""
+          width={40}
+          height={40}
+          className="md:hidden xl:block w-10 h-10 rounded-full object-cover"
+        />
+
+  
+      </td>
       <td className="p-4 font-semibold">{item.LotteryName || "N/A"}</td>
       <td className="hidden md:table-cell">{item.DrawDate ? new Date(item.DrawDate).toLocaleDateString() : "N/A"}</td>
       <td className="hidden md:table-cell">{item.UnitPrice ? `Rs ${item.UnitPrice.toFixed(2)}` : "N/A"}</td>
       <td className="hidden md:table-cell">{item.UnitCommission ? `Rs ${item.UnitCommission.toFixed(2)}` : "N/A"}</td>
-      <td className="hidden md:table-cell">
-        {item.ImageUrl ? (
-          <a href={item.ImageUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500">
-            {item.ImageUrl}
-          </a>
-        ) : (
-          "N/A"
-        )}
-      </td>
+      <td className="hidden md:table-cell max-w-[140px] truncate overflow-hidden pr-8">
+  {item.ImageUrl ? (
+    <a href={item.ImageUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500">
+      {item.ImageUrl}
+    </a>
+  ) : (
+    "N/A"
+  )}
+</td>
       {/* Check for Availability */}
       <td className="hidden md:table-cell">
             {item.Stock?.Availability || "N/A"}
@@ -82,7 +95,8 @@ const LotteryListPage = async ({ searchParams }: { searchParams: { [key: string]
         <td>
           <div className="flex items-center gap-2">
             <FormModal table="lottery" type="update" id={item.LotteryID} data={item} />
-            {(role === "admin" || role === "district_agent") && <FormModal table="lottery" type="delete" id={item.LotteryID} />}
+            {(role === "admin" || role === "district_agent" || role === "office_staff") && 
+            <FormModal table="lottery" type="delete" id={item.LotteryID} />}
           </div>
         </td>
       )}

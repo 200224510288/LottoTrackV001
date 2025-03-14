@@ -416,27 +416,20 @@ export const deleteLottery = async (currentState: CurrentState, data: FormData) 
       return { success: false, error: true, message: "Lottery ID is required." };
     }
 
-    // Perform the deletion in Prisma and Clerk using a transaction
-    await prisma.$transaction([
-      // Delete the staff from Prisma
-      prisma.lottery.delete({
-        where: { LotteryID: Number(id) },
-      }),
+    // Delete the associated stock first
+    await prisma.stock.delete({
+      where: { StockID: Number(id) },
+    });
 
-      // Delete the user from Prisma
-      prisma.stock.delete({
-        where: { StockID: Number(id) },
-      }),
-    ]);
-
-
-    // revalidatePath("/list/staff");
+    // Then delete the lottery
+    await prisma.lottery.delete({
+      where: { LotteryID: Number(id) },
+    });
 
     return { success: true, error: false };
   } catch (err: any) {
     console.error("Deletion failed:", err);
     const errorMessages = err.errors?.map((e: any) => e.message).join(" ") || "An unknown error occurred.";
-    
     return { success: false, error: true, message: errorMessages };
   }
-}; 
+};

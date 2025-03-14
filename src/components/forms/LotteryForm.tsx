@@ -5,11 +5,13 @@ import { useForm } from "react-hook-form";
 import InputField from "../InputField";
 import { lotterySchema, LotterySchema } from "@/lib/formValidationSchemas";
 import { createLottery, updateLottery } from "@/lib/actions";
-import { useState } from "react";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import SelectField from "../SelectField";
+import { CldUploadWidget } from "next-cloudinary";
+import Image from "next/image";
 
 const LotteryForm = ({
   type,
@@ -20,18 +22,17 @@ const LotteryForm = ({
   data?: any;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
-  console.log("LotteryForm received data:", data);
-
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue, // to update the form field programmatically
   } = useForm<LotterySchema>({
     resolver: zodResolver(lotterySchema),
     defaultValues: {
       StaffID: data?.StaffID || "",
       LotteryName: data?.LotteryName || "",
-      ImageUrl: data?.ImageUrl || "",
+      ImageUrl: data?.ImageUrl || "", // Ensure ImageUrl is populated on load
       DrawDate: data?.DrawDate ? new Date(data.DrawDate) : undefined,
       UnitPrice: data?.UnitPrice || 0,
       UnitCommission: data?.UnitCommission || 0,
@@ -63,7 +64,6 @@ const LotteryForm = ({
     }
 
     const payload = { ...formData, LotteryID: data?.LotteryID }; // Include LotteryID for update
-    console.log("Submitting payload:", payload);
     formAction(payload);
   });
 
@@ -135,17 +135,42 @@ const LotteryForm = ({
           error={errors.UnitCommission}
         />
 
-<SelectField
-  label="Availability"
-  name="Availability"
-  register={register}
-  error={errors.Availability}
-  options={[
-    { value: "Available", label: "Available" },
-    { value: "Unavailable", label: "Unavailable" },
-  ]}
-/>
+        <SelectField
+          label="Availability"
+          name="Availability"
+          register={register}
+          error={errors.Availability}
+          options={[
+            { value: "Available", label: "Available" },
+            { value: "Unavailable", label: "Unavailable" },
+          ]}
+        />
 
+        <CldUploadWidget
+          uploadPreset="LottoTrack" // Cloudinary upload preset
+          onSuccess={(result) => {
+            if (result?.info && typeof result.info !== 'string') { 
+              const imageUrl = result.info.secure_url;
+              setValue("ImageUrl", imageUrl); // Update the ImageUrl field in the form
+            } else {
+              console.error("Cloudinary upload failed: result.info is undefined or not an object");
+            }
+          }
+        
+        }
+        >
+          {({ open }) => {
+            return (
+              <div
+                className="text-xs text-gray-500 flex items-center gap-2 cursor-pointer"
+                onClick={() => open()}
+              >
+                <Image src="/upload.png" alt="" width={28} height={28} />
+                <span>Upload a photo</span>
+              </div>
+            );
+          }}
+        </CldUploadWidget>
       </div>
 
       {state.error && (
