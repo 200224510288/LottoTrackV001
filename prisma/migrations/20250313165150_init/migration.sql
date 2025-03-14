@@ -93,7 +93,7 @@ CREATE TABLE "Order_Contain_Lottery" (
 CREATE TABLE "Stock" (
     "StockID" INTEGER NOT NULL,
     "StaffID" TEXT NOT NULL,
-    "Availability" BOOLEAN NOT NULL,
+    "Availability" TEXT NOT NULL,
     "LastUpdateDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Stock_pkey" PRIMARY KEY ("StockID")

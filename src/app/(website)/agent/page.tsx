@@ -136,13 +136,13 @@ export default function Home() {
         <h1 className="font-bold text-3xl mt-10 mb-10 ml-10 text-gray-600">NLB TICKETS</h1>
         
 
-        <div className="overflow-x-auto mb-20 ml-10">
-          <div className="grid grid-cols-3 gap-16">
+        <div className="overflow-x-auto ">
+          <div className="grid grid-cols-3 gap-16 ml-10 mb-20">
             {nlbtickets.map((nlbticket) => (
               <div
                 key={nlbticket.name}
-                className="w-full h-50 bg-white rounded-lg shadow-md text-center relative overflow-hidden border border-black"
-              >
+                className="w-full h-50 bg-white rounded-lg shadow-md text-center relative overflow-hidden border border-black transition-all duration-300 hover:shadow-2xl hover:shadow-black"
+                >
                 <img
                   src={nlbticket.image}
                   alt={nlbticket.name}
@@ -165,12 +165,12 @@ export default function Home() {
 
         <h1 className="font-bold text-3xl mt-10 mb-10 ml-10">DLB TICKETS</h1>
 
-        <div className="overflow-x-auto mb-20 ml-10">
-          <div className="grid grid-cols-3 gap-16">
+        <div className="overflow-x-auto">
+          <div className="grid grid-cols-3 gap-16  mb-20 ml-10">
             {dlbtickets.map((dlbticket) => (
               <div
                 key={dlbticket.name}
-                className="w-full h-70 bg-white rounded-lg shadow-md text-center relative overflow-hidden border border-black"
+                className="w-full h-50 bg-white rounded-lg shadow-md text-center relative overflow-hidden border border-black transition-all duration-300 hover:shadow-2xl hover:shadow-black"
               >
                 <img
                   src={dlbticket.image}
