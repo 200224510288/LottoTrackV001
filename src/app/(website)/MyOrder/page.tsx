@@ -7,7 +7,6 @@ import Cart from "@/components/Cart";
 import { Bus } from 'lucide-react';
 import Image from 'next/image';
 
-
 interface Order {
   name: string;
   OrderID: number;
@@ -24,7 +23,6 @@ export default function MyOrder() {
   useEffect(() => {
     document.title = "My Order";
 
-    
     const orderData: Omit<Order, "logoUrl">[] = [
       {
         name: "MR. Remand Daramasena",
@@ -47,7 +45,11 @@ export default function MyOrder() {
     setDispatchedOrders([]); 
   }, []);
 
-  const renderOrders = (orders: Order[]) => {
+  const renderOrders = (orders: Order[] | null) => {
+    if (orders === null) {
+      return <p className="text-gray-600">Loading...</p>;
+    }
+    
     if (orders.length === 0) {
       return <p className="text-gray-600">No orders available.</p>;
     }
@@ -56,13 +58,13 @@ export default function MyOrder() {
       <div className="space-y-4">
         {orders.map((order) => (
           <div key={order.OrderID} className="bg-white p-4 rounded-lg shadow-md flex items-center gap-4">
-            {/* Order Logo on the Left Side */}
             <Image
               src={order.logoUrl}
               alt="Order Logo"
-              className="w-16 h-16 object-contain" 
+              width={64}
+              height={64}
+              className="w-16 h-16 object-contain"
             />
-            {/* Order Details on the Right Side */}
             <div>
               <h3 className="font-semibold text-lg text-gray-600">{order.name}</h3>
               <p>Status: Ongoing</p>
@@ -80,9 +82,7 @@ export default function MyOrder() {
         <title>My Order</title>
       </Head>
 
-      {/* Setting the background image */}
       <div className="min-h-screen bg-cover bg-center overflow-hidden" style={{ backgroundImage: "url('/bg.png')" }}>
-        {/* Navbar */}
         <Navbar />
         <Cart />
 
@@ -98,23 +98,15 @@ export default function MyOrder() {
         </div>
 
         {/* Flex container for the order boxes */}
-        <div className="flex gap-8 mx-16 mb-16 flex-wrap w-2/3">
+        <div className="flex gap-8 mx-16 mb-16 flex-wrap w-full sm:w-2/3">
           <div className="flex-1 bg-gray-200 p-8 rounded-lg shadow-lg overflow-y-auto max-h-80">
             <h2 className="text-xl font-semibold mb-5 text-gray-600">Ongoing Orders</h2>
-            {ongoingOrders === null ? (
-              <p className="text-gray-600">Loading...</p>
-            ) : (
-              renderOrders(ongoingOrders)
-            )}
+            {renderOrders(ongoingOrders)}
           </div>
 
           <div className="flex-1 bg-gray-200 p-8 rounded-lg shadow-lg overflow-y-auto max-h-80">
             <h2 className="text-xl font-semibold mb-5 text-gray-600">Dispatched Orders</h2>
-            {dispatchedOrders === null ? (
-              <p>Loading...</p>
-            ) : (
-              renderOrders(dispatchedOrders)
-            )}
+            {renderOrders(dispatchedOrders)}
           </div>
         </div>
       </div>

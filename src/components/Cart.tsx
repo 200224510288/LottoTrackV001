@@ -34,7 +34,14 @@ const Cart = () => {
 
      {/* Bus Stop Selection */}
     <div className="w-full px-2 mb-6 flex items-center space-x-2 shadow-md">
-      <Image src="/BusLogo.png" alt="Bus Logo" className="w-12 h-10" />
+    <Image 
+  src="/BusLogo.png" 
+  alt="Bus Logo" 
+  width={48} // Specify the width
+  height={40} // Specify the height
+  className="w-12 h-10" 
+/>
+
       {/* Dropdown */}
       <div className="relative w-full ">
         <select className="w-full p-6 pl-10 pr-4 appearance-none">
