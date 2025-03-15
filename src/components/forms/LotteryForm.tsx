@@ -115,7 +115,7 @@ const LotteryForm = ({
           name="ImageUrl"
           register={register}
           error={errors.ImageUrl}
-          inputProps={{ disabled: true, placeholder: "Image URL will be set after upload" }}
+          inputProps={{disabled: true, placeholder: "Image URL will be set after upload"}}
         />
 
         <InputField

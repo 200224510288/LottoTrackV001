@@ -5,6 +5,8 @@ import Head from "next/head";
 import Navbar from "@/components/Navbar";
 import Cart from "@/components/Cart";
 import { UserButton } from "@clerk/nextjs";
+import Image from 'next/image';
+
 
 export default function Home() {
   useEffect(() => {
@@ -143,7 +145,7 @@ export default function Home() {
                 key={nlbticket.name}
                 className="w-full h-50 bg-white rounded-lg shadow-md text-center relative overflow-hidden border border-black transition-all duration-300 hover:shadow-2xl hover:shadow-black"
                 >
-                <img
+                <Image
                   src={nlbticket.image}
                   alt={nlbticket.name}
                   className="w-full h-45 object-cover"
@@ -172,7 +174,7 @@ export default function Home() {
                 key={dlbticket.name}
                 className="w-full h-50 bg-white rounded-lg shadow-md text-center relative overflow-hidden border border-black transition-all duration-300 hover:shadow-2xl hover:shadow-black"
               >
-                <img
+                <Image
                   src={dlbticket.image}
                   alt={dlbticket.name}
                   className="w-full h-50 object-cover"

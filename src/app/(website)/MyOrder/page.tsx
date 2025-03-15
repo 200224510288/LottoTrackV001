@@ -5,6 +5,8 @@ import Head from "next/head";
 import Navbar from "@/components/Navbar";
 import Cart from "@/components/Cart";
 import { Bus } from 'lucide-react';
+import Image from 'next/image';
+
 
 interface Order {
   name: string;
@@ -55,7 +57,7 @@ export default function MyOrder() {
         {orders.map((order) => (
           <div key={order.OrderID} className="bg-white p-4 rounded-lg shadow-md flex items-center gap-4">
             {/* Order Logo on the Left Side */}
-            <img
+            <Image
               src={order.logoUrl}
               alt="Order Logo"
               className="w-16 h-16 object-contain" 
