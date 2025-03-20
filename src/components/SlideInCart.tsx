@@ -1,39 +1,57 @@
 "use client";
 
-import { ShoppingCart, Bus } from "lucide-react";
-import React, { useState } from "react"; // Import useState
+import { ShoppingCart, X } from "lucide-react";
+import React, { useState } from "react";
 
-const Cart = () => {
-  const [deliveryOption, setDeliveryOption] = useState<"selfPick" | "dispatch">("selfPick"); // State for delivery option
+interface SlideInCartProps {
+  className?: string;
+  onClose: () => void;
+}
+
+const SlideInCart = ({ className, onClose }: SlideInCartProps) => {
+  const [deliveryOption, setDeliveryOption] = useState<"selfPick" | "dispatch">("selfPick");
+
+  const handleCartClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
 
   return (
-    <div className="cart-container fixed right-0 top-10 h-full w-1/4 bg-white text-gray-700 shadow-xl flex flex-col items-center py-6 overflow-y-auto max-h-screen">
-      <h2 className="text-lg mt-5 font-bold mb-4 flex items-center gap-2">
-        <ShoppingCart size={30} />
-        CART
-      </h2>
+    <div
+      className={`fixed right-0 top-0 h-full w-80 bg-white shadow-xl flex flex-col overflow-y-auto ${className}`}
+      onClick={handleCartClick}
+    >
+      {/* Header */}
+      <div className="flex justify-between items-center p-6 border-b">
+        <h2 className="text-xl font-bold flex items-center gap-2">
+          <ShoppingCart size={24} />
+          Your Cart
+        </h2>
+        <button className="text-gray-700 hover:text-gray-900" onClick={onClose}>
+          <X size={24} />
+        </button>
+      </div>
 
       {/* Delivery Options */}
-      <div className="w-full flex justify-center gap-40 mb-4 text-lg">
+      <div className="w-full flex justify-center gap-36 my-4 text-sm">
         <label className="flex items-center gap-2">
           <input
             type="radio"
             name="deliveryOption"
             value="selfPick"
             checked={deliveryOption === "selfPick"}
-            onChange={() => setDeliveryOption("selfPick")} // Update state
-            className="form-radio h-5 w-5 text-blue-500"
+            onChange={() => setDeliveryOption("selfPick")}
+            className="form-radio text-blue-500 ml-4"
           />
           <span className="text-gray-700">Self Pick</span>
         </label>
-        <label className="flex items-center gap-2">
+        <label className="flex items-center">
           <input
             type="radio"
             name="deliveryOption"
             value="dispatch"
             checked={deliveryOption === "dispatch"}
-            onChange={() => setDeliveryOption("dispatch")} // Update state
-            className="form-radio h-5 w-5 text-blue-500"
+            onChange={() => setDeliveryOption("dispatch")}
+            className="form-radio text-blue-500"
           />
           <span className="text-gray-700">Dispatch</span>
         </label>
@@ -48,7 +66,7 @@ const Cart = () => {
             className={`w-full p-6 pl-10 pr-4 appearance-none ${
               deliveryOption === "selfPick" ? "opacity-50 cursor-not-allowed" : ""
             }`}
-            disabled={deliveryOption === "selfPick"} // Disable if self-pick is selected
+            disabled={deliveryOption === "selfPick"}
           >
             <option value="centralStation">Central Station</option>
             <option value="mainStreet">Main Street</option>
@@ -104,4 +122,4 @@ const Cart = () => {
   );
 };
 
-export default Cart;
+export default SlideInCart;

@@ -108,3 +108,69 @@
   color: gray !important;
   margin-bottom: 5px !important;
 }
+
+
+/* Define Keyframes Globally */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Slide-In and Slide-Out Classes */
+.slide-in {
+  animation: slideIn 0.3s ease-in-out forwards;
+}
+
+.slide-out {
+  animation: slideOut 0.3s ease-in-out forwards;
+}
+
+/* Cart Container Styles */
+@media (max-width: 1045px) {
+  .cart-container {
+    display: none;
+  }
+
+  .ticket-container {
+    width: 100%;
+  }
+
+  .Cart-icon {
+    display: block;
+  }
+
+}
+
+/* Cart Container Styles */
+@media (max-width: 380px) {
+ .search-btn-agent{
+  padding: 10px;
+  font-size: small;
+ }
+ 
+}
+
+@media (max-width: 430px) {
+
+  .tickets{
+    margin-left: .5rem;
+   }
+}
+@media (width: 320px) {
+  .ticket-status {
+    font-size: small; /* Applies only at 320px */
+  }
+}

@@ -82,14 +82,14 @@ export default function MyOrder() {
         <title>My Order</title>
       </Head>
 
-      <div className="min-h-screen bg-cover bg-center overflow-hidden" style={{ backgroundImage: "url('/bg.png')" }}>
+      <div className="ticket-container min-h-screen bg-cover bg-center overflow-hidden" style={{ backgroundImage: "url('/bg.png')" }}>
         <Navbar />
         <Cart />
 
         <h1 className="font-bold text-3xl mt-24 mb-10 ml-16 text-gray-600">MY ORDER</h1>
 
         {/* New Box on Top */}
-        <div className="mx-16 mb-8 flex ">
+        <div className="mx-16 mb-8 flex">
           <div className="bg-gray-300 p-4 rounded-lg shadow-lg w-1/4">
             <h2 className="text-lg mt-5 font-bold mb-4 flex items-center gap-2 text-gray-600">
               <Bus size={30} />Bus
@@ -110,6 +110,17 @@ export default function MyOrder() {
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @media (max-width: 1030px) {
+          .flex-wrap {
+            flex-direction: column;
+          }
+          .flex-1 {
+            width: 100%;
+          }
+        }
+      `}</style>
     </>
   );
 }

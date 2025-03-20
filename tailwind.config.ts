@@ -22,7 +22,11 @@ const config: Config = {
         YellowLight: "#FEFCE8",
         NavBlue : "#0743aa",
         DashboardBlue : "#062855"
-      }
+      },
+      screens: {
+        'custom-md': '770px', 
+        'custom-md2': '610px',
+      },
     },
   },
   plugins: [],

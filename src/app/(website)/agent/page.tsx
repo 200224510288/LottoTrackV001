@@ -1,6 +1,6 @@
-"use client"; 
+"use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Head from "next/head";
 import Navbar from "@/components/Navbar";
 import Cart from "@/components/Cart";
@@ -45,22 +45,29 @@ export default function Home() {
       <Cart />
 
       {/* Main Content */}
-      <div className="fixed left-0 top-10 p-6 w-3/4 overflow-y-auto max-h-screen bg-cover bg-center" style={{ backgroundImage: "url('/bg.png')" }}>
-        <div className="flex gap-5 ml-10 mt-10">
-          <label className="text-lg mt-2 font-bold text-gray-700">Search Date:</label>
-          <input type="date" className="p-2 border border-gray-300 rounded" />
-          <button className="bg-NavBlue text-white px-4 py-2 rounded">Search</button>
-        </div>
+      <div className="ticket-container fixed left-0 top-10 p-6 w-3/4 overflow-y-auto max-h-screen bg-cover bg-center" style={{ backgroundImage: "url('/bg.png')" }}>
+      <div className="flex gap-5 ml-10 mt-10">
+        {/* Search Date Label */}
+        <label className="hidden sm:block text-lg mt-2 font-bold text-gray-700">Search Date:</label>
+
+        {/* Search Date Input */}
+        <input type="date" className="p-2 border border-gray-300 rounded" />
+
+        {/* Search Button */}
+        <button className="search-btn-agent bg-NavBlue text-white px-4 py-2 rounded ">
+          Search
+        </button>
+      </div>
 
         <h1 className="font-bold text-3xl mt-10 mb-10 ml-10 text-gray-600">NLB TICKETS</h1>
 
         <div className="overflow-x-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-16 ml-10 mb-20">
+          <div className="tickets grid grid-cols-1 custom-md2:grid-cols-2 lg:grid-cols-3 gap-16 ml-10 mb-20">
             {nlbtickets.map((nlbticket) => (
               <div key={nlbticket.name} className="w-full h-50 bg-white rounded-lg shadow-md text-center relative overflow-hidden border border-black transition-all duration-300 hover:shadow-2xl hover:shadow-black">
                 <Image src={nlbticket.image} alt={nlbticket.name} width={300} height={250} className="w-full h-45 object-cover" />
                 <div className="flex items-center gap-2 p-2 bg-white">
-                  <p className="text-md text-gray-600 pr-18 pl-4">{nlbticket.status}</p>
+                  <p className="ticket-status text-md text-gray-600 pr-18 pl-4">{nlbticket.status}</p>
                   <button className="px-2 bg-gray-300 rounded-full">-</button>
                   <span className="text-md font-bold">{nlbticket.quantity}</span>
                   <button className="px-2 bg-gray-300 rounded-full">+</button>
@@ -73,14 +80,14 @@ export default function Home() {
         <h1 className="font-bold text-3xl mt-10 mb-10 ml-10">DLB TICKETS</h1>
 
         <div className="overflow-x-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-16 ml-10 mb-20">
+          <div className="tickets grid grid-cols-1 custom-md2:grid-cols-2 lg:grid-cols-3 gap-16 ml-10 mb-20">
             {dlbtickets.map((dlbticket) => (
               <div key={dlbticket.name} className="w-full h-50 bg-white rounded-lg shadow-md text-center relative overflow-hidden border border-black transition-all duration-300 hover:shadow-2xl hover:shadow-black">
                 <Image src={dlbticket.image} alt={dlbticket.name} width={300} height={250} className="w-full h-50 object-cover" />
                 <div className="flex items-center gap-2 p-2 bg-white">
-                  <p className="text-md text-gray-600 pr-18 pl-4">{dlbticket.status}</p>
+                  <p className="ticket-status text-md text-gray-600 pr-18 pl-4">{dlbticket.status}</p>
                   <button className="px-2 bg-gray-300 rounded-full">-</button>
-                  <span className="text-md font-bold">{dlbticket.quantity}</span>
+                  <span className="quantity text-md font-bold">{dlbticket.quantity}</span>
                   <button className="px-2 bg-gray-300 rounded-full">+</button>
                 </div>
               </div>
