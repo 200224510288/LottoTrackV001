@@ -7,44 +7,34 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useUser, useClerk } from "@clerk/nextjs";
 
-
 const LoginPage = () => {
-
-  
   const { isLoaded, isSignedIn, user } = useUser();
-  const { signOut } = useClerk(); // Use signOut from useClerk
-
+  const { signOut } = useClerk();
   const router = useRouter();
 
-  const handleSignOut = () => {
-    signOut();
-    router.push("/"); // Redirect user to the home page after sign out
-  };
-
   useEffect(() => {
-    const role = user?.publicMetadata.role;
- 
-    if (role) {
-      router.push(`/${role}`);
+    if (isLoaded && user) {
+      const role = user.publicMetadata?.role;
+      if (role) {
+        router.push(`/${role}`);
+      }
     }
-  }, [user, router]);
+  }, [isLoaded, user, router]);
+
   return (
     <div className="h-screen flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: "url('/loginbg.png')" }}>
       <SignIn.Root>
-        <SignIn.Step
-          name="start"
-          className="bg-white p-12 w-1/3 rounded-3xl flex flex-col gap-5 shadow-2xl shadow-gray-700"
-        >
+        {/* Login Step */}
+        <SignIn.Step name="start" className="bg-white p-12 w-1/3 rounded-3xl flex flex-col gap-5 shadow-2xl shadow-gray-700">
           <div className="flex justify-center">
             <Image src="/userprofile.png" alt="User Profile" width={80} height={80} />
-            
           </div>
           <div className="flex justify-center">
-          <h1 className="text-3xl font-semibold flex items-center ">
-            Sign In
-          </h1>
+            <h1 className="text-3xl font-semibold flex items-center">Sign In</h1>
           </div>
+
           <Clerk.GlobalError className="text-sm text-red-400" />
+
           <Clerk.Field name="identifier" className="relative w-full px-11">
             <Clerk.Input
               type="text"
@@ -70,15 +60,43 @@ const LoginPage = () => {
             </Clerk.Label>
             <Clerk.FieldError className="text-xs text-red-400" />
           </Clerk.Field>
-          <div className='flex justify-center'>
-          <SignIn.Action
-            submit
-            className="bg-[#09B0BC] text-white my-1 rounded-full w-1/3 text-sm p-4 shadow-xl shadow-gray-500/50"
-          >
-            Login
-          </SignIn.Action>
-        </div>
 
+          <div className='flex justify-center'>
+            <SignIn.Action
+              submit
+              className="bg-[#09B0BC] text-white my-1 rounded-full w-1/3 text-sm p-4 shadow-xl shadow-gray-500/50"
+            >
+              Login
+            </SignIn.Action>
+          </div>
+        </SignIn.Step>
+
+        {/* Two-Step Verification Step */}
+        <SignIn.Step name="verifications" className="bg-white p-12 w-1/3 rounded-3xl flex flex-col gap-5 shadow-2xl shadow-gray-700">
+          <header className="text-center">
+            <h1 className="text-2xl font-semibold flex items-center">Two-Factor Authentication (2FA) Code</h1>
+          </header>
+
+          <Clerk.GlobalError className="text-sm text-red-400" />
+
+          <Clerk.Field name="code">
+            <Clerk.Label className="text-gray-700">Enter Code</Clerk.Label>
+            <Clerk.Input 
+              type="text" 
+              required 
+              className="w-full p-3 rounded-lg ring-1 ring-gray-300 focus:ring-2 focus:ring-blue-500"
+            />
+            <Clerk.FieldError className="text-xs text-red-400" />
+          </Clerk.Field>
+
+          <div className='flex justify-center'>
+            <SignIn.Action
+              submit
+              className="bg-[#09B0BC] text-white my-1 rounded-full w-1/3 text-sm p-4 shadow-xl shadow-gray-500/50"
+            >
+              Verify
+            </SignIn.Action>
+          </div>
         </SignIn.Step>
       </SignIn.Root>
     </div>
@@ -86,7 +104,3 @@ const LoginPage = () => {
 }
 
 export default LoginPage;
-
-function signOut() {
-  throw new Error('Function not implemented.');
-}

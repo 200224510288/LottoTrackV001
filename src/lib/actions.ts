@@ -83,7 +83,6 @@ export const updateAgent = async (currentState: CurrentState, data: AgentSchema)
   try {
     // Step 1: Update the user in Clerk
     const clerkUser = await clerkClient.users.updateUser(data.id, {
-      email: data.email,
       username: data.userName,
       password: data.password ?? "", // If password is provided, update it
     });
@@ -237,7 +236,6 @@ export const updateStaff = async (currentState: CurrentState, data: StaffSchema)
 
     // Step 1: Update the user in Clerk
     const clerkUser = await clerkClient.users.updateUser(data.id, {
-      email: data.email,
       username: data.userName,
       password: data.password ?? "", // If password is provided, update it
     });
