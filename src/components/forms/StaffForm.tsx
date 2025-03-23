@@ -60,7 +60,7 @@ const router = useRouter();
   
 
   return (
-    <form className="flex flex-col gap-8" onSubmit={onSubmit}>
+    <form className="flex flex-col gap-8 overflow-y-auto" onSubmit={onSubmit}>
       <h1 className="text-xl font-semibold">
         {type === "create" ? "Create a new Staff" : "Update Staff"}
       </h1>

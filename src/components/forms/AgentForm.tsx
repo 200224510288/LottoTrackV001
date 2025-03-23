@@ -68,7 +68,7 @@ useEffect(() => {
   
 
   return (
-    <form className="flex flex-col gap-4" onSubmit={onSubmit}>
+    <form className="flex flex-col gap-8 overflow-y-auto" onSubmit={onSubmit}>
       <h1 className="text-xl text-gray-700 font-semibold text-center w-full">
         {type === "create" ? "Create a new Agent" : "Update Agent"}
       </h1>

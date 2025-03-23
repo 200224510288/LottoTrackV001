@@ -71,7 +71,7 @@ const LotteryListPage = async ({ searchParams }: { searchParams: { [key: string]
           alt={item.LotteryName}
           width={40}
           height={40}
-          className="md:hidden xl:block w-10 h-10 rounded-full object-cover"
+          className="xl:block w-10 h-10 rounded-full object-cover"
         />
       </td>
       <td className="p-4 font-semibold">{item.LotteryName || "N/A"}</td>

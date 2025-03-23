@@ -91,7 +91,7 @@ const FormModal = ({
           className={`${size} flex items-center justify-center rounded-full ${bgColor}`}
           onClick={() => setOpen(true)}
         >
-          <Image src={`/${type}.png`} alt="" width={20} height={0} />
+          <Image src={`/${type}.png`} alt="" width={20} height={20} />
           
           
         </button>

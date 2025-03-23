@@ -1,7 +1,9 @@
+import AdminPage from "../admin/page";
+
 const OfficeStaffPage = () => {
   return (
-    <div>OfficeStaffPage</div>
-  );
+    AdminPage()  );
+  
 }
 
 export default OfficeStaffPage;

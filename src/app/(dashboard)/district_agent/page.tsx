@@ -1,7 +1,8 @@
+import AdminPage from "../admin/page";
+
 const DistrictAgentPage = () => {
   return (
-    <div>DistrictAgentPage</div>
-  );
+    AdminPage()  );
 }
 
 export default DistrictAgentPage;

@@ -1,7 +1,17 @@
 import React from "react";
 import Image from "next/image"; // Import the Image component from Next.js
+import { currentUser } from "@clerk/nextjs/server";
 
-const AdminPage = () => {
+
+
+
+export const getUserData = async () => {
+  const user = await currentUser();
+  return user;
+};
+
+
+const AdminPage = async () => {
   // Dummy data
   const dummyData = {
     stats: {
@@ -68,10 +78,14 @@ const AdminPage = () => {
     ],
   };
 
+    const user = await getUserData();
+  
+
   return (
+    
     <div className="min-h-screen bg-gray-100 p-8">
       <h1 className="text-2xl font-bold mb-8">
-        Welcome Back <span className="text-blue-600">Admin</span>!
+        Welcome Back <span className="text-blue-600">{user?.username}</span>!
       </h1>
 
       {/* Stats Section */}
