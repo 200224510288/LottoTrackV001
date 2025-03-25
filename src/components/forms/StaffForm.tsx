@@ -60,11 +60,11 @@ const router = useRouter();
   
 
   return (
-    <form className="flex flex-col gap-8 overflow-y-auto" onSubmit={onSubmit}>
+    <form className="flex flex-col gap-8 overflow-y-auto max-h-[calc(100vh-40px)] p-4" onSubmit={onSubmit}>
       <h1 className="text-xl font-semibold">
         {type === "create" ? "Create a new Staff" : "Update Staff"}
       </h1>
-      <span className="text-xs text-gray-400 font-medium">Authentication Information</span>
+      <span className="text-md text-gray-900">Authentication Information</span>
 
       <div className="flex justify-between flex-wrap gap-4"> 
         <InputField
@@ -91,23 +91,14 @@ const router = useRouter();
             defaultValue={data?.User.Password}
             register={register}
             error={errors?.password}
+            
           />
-          <button
-            type="button"
-            className="absolute right-5 top-40 transform -translate-y-1/2"
-            onClick={() => setPasswordVisible((prev) => !prev)}
-          >
-            {passwordVisible ? (
-              <FaEyeSlash size={20} />
-            ) : (
-              <FaEye size={20} />
-            )}
-          </button>
+         
       </div>
 
-      <span className="text-xs text-gray-400 font-medium">Personal Information</span>
+      <span className="text-md text-gray-900">Personal Information</span>
 
-      <div className="flex justify-between flex-wrap gap-4">
+      <div className="flex justify-between gap-4">
         <InputField
           label="First Name"
           name="firstName"
@@ -123,7 +114,9 @@ const router = useRouter();
           register={register}
           error={errors.lastName}
         />
+        </div>
 
+        <div className="flex justify-between flex-wrap gap-4">
         <InputField
           label="Section"
           name="section"
@@ -140,7 +133,7 @@ const router = useRouter();
         />   
       </div>
         {state.error && <span className="text-red-500 font-semibold">Something went wrong!</span>}
-      <button className="bg-blue-400 text-white p-2 rounded-md mt-4">
+      <button className="bg-DashboardBlue text-white p-2 rounded-md mt-4">
         {type === "create" ? "Create" : "Update"}
       </button>
     </form>

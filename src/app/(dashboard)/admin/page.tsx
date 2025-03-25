@@ -99,11 +99,11 @@ const AdminPage = async () => {
               Total Dispatch
             </h2>
             <Image
-              src="/delivery.png" // Path to your image in the public folder
+              src="/delivery.png" 
               alt="Delivery"
-              width={40} // Set the width of the image
-              height={0} // Set the height of the image
-              className="w-8 h-8" // Optional: Additional styling
+              width={60} 
+              height={60} 
+              
             />
           </div>
           <p className="text-3xl font-bold text-gray-900">
@@ -116,7 +116,15 @@ const AdminPage = async () => {
 
         {/* Total Orders */}
         <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="flex items-center gap-36 mb-4">
           <h2 className="text-lg font-semibold text-gray-700">Total Orders</h2>
+          <Image
+              src="/order2.png" 
+              alt="Delivery"
+              width={60} 
+              height={60} 
+            />
+            </div>
           <p className="text-3xl font-bold text-gray-900">
             {dummyData.stats.totalOrders}
           </p>
@@ -127,7 +135,15 @@ const AdminPage = async () => {
 
         {/* Total Agents */}
         <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="flex items-center gap-36 mb-4">
           <h2 className="text-lg font-semibold text-gray-700">Total Agents</h2>
+          <Image
+              src="/agent2.png" 
+              alt="Delivery"
+              width={60} 
+              height={60}              
+            />
+            </div>
           <p className="text-3xl font-bold text-gray-900">
             {dummyData.stats.totalAgents}
           </p>

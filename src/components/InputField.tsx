@@ -26,7 +26,7 @@ const InputField = ({
     
     return (
         <div className="flex flex-col gap-2 w-full ">
-   <label className="text-xs text-gray-500">{label}</label>
+   <label className="text-sm text-gray-800">{label}</label>
       <input
         type={type}
         {...register(name)}

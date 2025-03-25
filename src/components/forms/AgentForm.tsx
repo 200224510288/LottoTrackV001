@@ -68,23 +68,23 @@ useEffect(() => {
   
 
   return (
-    <form className="flex flex-col gap-8 overflow-y-auto" onSubmit={onSubmit}>
+    <form className="flex flex-col gap-8 overflow-y-auto max-h-[calc(100vh-40px)] p-4" onSubmit={onSubmit}>
       <h1 className="text-xl text-gray-700 font-semibold text-center w-full">
         {type === "create" ? "Create a new Agent" : "Update Agent"}
       </h1>
-      <span className="text-s text-gray-400 font-medium">Authentication Information</span>
+      <span className="text-md text-gray-900 ">Authentication Information</span>
       <div className="grid grid-cols-2 items-center gap-1 "> 
-      <label className="text-xs text-gray-500 ">Username</label>
+      <label className="text-sm text-gray-800 ">Username</label>
         <InputField
           label=""
           name="userName"
           defaultValue={data?.User.UserName}
           register={register}
           error={errors?.userName}
-          
+        
           
         />
-        <label className="text-xs text-gray-500">Email</label>
+        <label className="text-sm text-gray-800 ">Email</label>
         <InputField
           label=""
           name="email"
@@ -93,7 +93,7 @@ useEffect(() => {
           register={register}
           error={errors?.email}
         />
-        <label className="text-xs text-gray-500">Password</label>
+        <label className="text-sm text-gray-800">Password</label>
           <InputField
             label=""
             name="password"
@@ -104,8 +104,9 @@ useEffect(() => {
           />
         
       </div>
-      <span className="text-s text-gray-400 font-medium">Personal Information</span>
+      <span className="text-md text-gray-900 ">Personal Information</span>
 
+      
       <div className="flex justify-between gap-4">
         <InputField
           label="First Name"
@@ -123,33 +124,40 @@ useEffect(() => {
           error={errors.lastName}
         />
       </div>
-      <span className="text-s text-gray-400 font-medium">Address</span>
-      <div className="flex justify-between gap-4">
-        <InputField
-          label="Office Address"
-          name="officeAddress"
-          defaultValue={data?.OfficeAddress}
-          register={register}
-          error={errors.officeAddress}
-        />
-
-        <InputField
-          label="Home Address"
-          name="homeAddress"
-          defaultValue={data?.HomeAddress}
-          register={register}
-          error={errors.homeAddress}
-        />
-
-        <InputField
-          label="City"
-          name="city"
-          defaultValue={data?.City}
-          register={register}
-          error={errors.city}
-        />
-       </div>
-       <span className="text-s text-gray-400 font-medium">Contact Details</span>
+      <span className="text-md text-gray-900 ">Address</span>
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col">
+          <label className="text-sm text-gray-800">Office Address</label>
+          <InputField
+            label=""
+            name="officeAddress"
+            defaultValue={data?.OfficeAddress}
+            register={register}
+            error={errors.officeAddress}
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="text-sm text-gray-800">Home Address</label>
+          <InputField
+            label=""
+            name="homeAddress"
+            defaultValue={data?.HomeAddress}
+            register={register}
+            error={errors.homeAddress}
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="text-sm text-gray-800">City</label>
+          <InputField
+            label=""
+            name="city"
+            defaultValue={data?.City}
+            register={register}
+            error={errors.city}
+          />
+        </div>
+      </div>
+       <span className="text-md text-gray-900 ">Contact Details</span>
       <div className="flex justify-between gap-4">
      <InputField
         label="Contact Number 1"
