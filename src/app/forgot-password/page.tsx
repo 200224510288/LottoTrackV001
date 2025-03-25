@@ -108,7 +108,7 @@ const ForgotPasswordPage = () => {
         return (
           <>
             <p className="text-gray-600 text-center text-sm">
-              Enter your email address and we&apos;ll send you a verification code.
+            Enter your email to receive a verification code and reset your password.
             </p>
 
             {error && <p className="text-sm text-red-400 text-center">{error}</p>}
@@ -134,7 +134,7 @@ const ForgotPasswordPage = () => {
                   disabled={isLoading}
                   className="bg-[#09B0BC] text-white my-1 rounded-full w-full md:w-1/3 text-sm p-3 md:p-4 shadow-xl shadow-gray-500/50 disabled:opacity-50"
                 >
-                  {isLoading ? 'Sending...' : 'Send Verification Code'}
+                  {isLoading ? 'Sending...' : 'Continue'}
                 </button>
               </div>
             </form>

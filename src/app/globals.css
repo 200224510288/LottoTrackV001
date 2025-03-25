@@ -174,3 +174,23 @@
     font-size: small; /* Applies only at 320px */
   }
 }
+
+/* Add this to your CSS file or style tag */
+.logo {
+  display: block;
+}
+
+.logosmall {
+  display: none;
+}
+
+@media (max-width: 770px) {
+  .logo {
+    display: none;
+  }
+  
+  .logosmall {
+    display: block;
+  
+  }
+}
