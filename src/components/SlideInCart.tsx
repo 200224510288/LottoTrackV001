@@ -2,6 +2,7 @@
 
 import { ShoppingCart, X } from "lucide-react";
 import React, { useState } from "react";
+import Image from 'next/image';
 
 interface SlideInCartProps {
   className?: string;
@@ -59,8 +60,8 @@ const SlideInCart = ({ className, onClose }: SlideInCartProps) => {
 
       {/* Bus Stop Selection */}
       <div className="w-full px-2 mb-6 flex items-center space-x-2 shadow-md relative">
-        <img src="/BusLogo.png" alt="Bus Logo" className="w-12 h-10" />
-        {/* Dropdown */}
+      <Image src="/BusLogo.png" alt="Bus Logo" width="48" height="40" />
+      {/* Dropdown */}
         <div className="relative w-full">
           <select
             className={`w-full p-6 pl-10 pr-4 appearance-none ${

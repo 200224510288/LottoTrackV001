@@ -2,6 +2,7 @@
 
 import { ShoppingCart, Bus } from "lucide-react";
 import React, { useState } from "react"; // Import useState
+import Image from 'next/image';
 
 const Cart = () => {
   const [deliveryOption, setDeliveryOption] = useState<"selfPick" | "dispatch">("selfPick"); // State for delivery option
@@ -41,7 +42,7 @@ const Cart = () => {
 
       {/* Bus Stop Selection */}
       <div className="w-full px-2 mb-6 flex items-center space-x-2 shadow-md relative">
-        <img src="/BusLogo.png" alt="Bus Logo" className="w-12 h-10" />
+        <Image src="/BusLogo.png" alt="Bus Logo" width={40} height={30}  />
         {/* Dropdown */}
         <div className="relative w-full">
           <select
