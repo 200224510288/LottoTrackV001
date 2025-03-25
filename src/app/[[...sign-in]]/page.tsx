@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useUser, useClerk } from "@clerk/nextjs";
+import Link from "next/link";
 
 const LoginPage = () => {
   const { isLoaded, isSignedIn, user } = useUser();
@@ -60,6 +61,25 @@ const LoginPage = () => {
             </Clerk.Label>
             <Clerk.FieldError className="text-xs text-red-400" />
           </Clerk.Field>
+
+          <div className="flex items-center justify-between px-5 pr-9 pl-9">
+            <Clerk.Field name="remember" className="flex items-center">
+              <Clerk.Input
+                type="checkbox"
+                className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <Clerk.Label className="ml-2 block text-sm text-gray-700">
+                Remember me
+              </Clerk.Label>
+            </Clerk.Field>
+
+            <Link 
+              href="/forgot-password" 
+              className="text-sm text-blue-600 hover:text-blue-500 hover:underline"
+            >
+              Forgot password?
+            </Link>
+          </div>
 
           <div className='flex justify-center'>
             <SignIn.Action
