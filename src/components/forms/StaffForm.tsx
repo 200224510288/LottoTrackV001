@@ -132,7 +132,7 @@ const router = useRouter();
           error={errors.superviserID}
         />   
       </div>
-        {state.error && <span className="text-red-500 font-semibold">Something went wrong!</span>}
+      {state.error && <span className="text-red-500 font-semibold">{state.message || "Something went wrong!"}</span>}
       <button className="bg-DashboardBlue text-white p-2 rounded-md mt-4">
         {type === "create" ? "Create" : "Update"}
       </button>
