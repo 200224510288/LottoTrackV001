@@ -15,7 +15,7 @@ const menuItems = [
       { icon: "/ticket2.png", label: "Lotteries", href: "/list/lotteries", visible: ["office_staff", "admin", "district_agent"] },
       { icon: "/history1.png", label: "History", href: "/list/orders", visible: ["office_staff", "admin", "district_agent"] },
       { icon: "/stock1.png", label: "Stock", href: "/list/stock", visible: ["office_staff", "admin", "district_agent"] },
-      { icon: "/addAgent1.png", label: "Add Office Staff", href: "/list/staff", visible: ["admin", "district_agent"] }
+      { icon: "/addAgent1.png", label: "Office Staff", href: "/list/staff", visible: ["admin", "district_agent"] }
     ],
   },
   {

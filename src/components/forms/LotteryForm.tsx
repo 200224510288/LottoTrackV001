@@ -87,12 +87,12 @@ const LotteryForm = ({
   }, [router, setOpen, state, type]);
 
   return (
-    <form className="flex flex-col gap-8 overflow-y-auto" onSubmit={onSubmit}>
+    <form className="flex flex-col gap-8 overflow-y-auto max-h-[calc(100vh-40px)] p-4" onSubmit={onSubmit}>
       <h1 className="text-xl font-semibold">
         {type === "create" ? "Create a new Lottery" : "Update Lottery"}
       </h1>
 
-      <span className="text-xs text-gray-400 font-medium">Lottery Information</span>
+      <span className="text-md text-gray-900">Lottery Information</span>
 
       <div className="flex justify-between flex-wrap gap-4">
         <InputField
@@ -185,7 +185,7 @@ const LotteryForm = ({
         </span>
       )}
 
-      <button className="bg-blue-400 text-white p-2 rounded-md mt-4">
+      <button className="bg-DashboardBlue text-white p-2 rounded-md mt-4">
         {type === "create" ? "Create" : "Update"}
       </button>
     </form>
