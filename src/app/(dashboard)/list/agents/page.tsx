@@ -72,7 +72,7 @@ const AgentListPage = async ({ searchParams }: { searchParams: { [key: string]: 
         <td>
           <div className="flex pl-4 items-center gap-2">
           <FormModal table="agent" type="update" id={item.AgentID} data={item} />
-            {(role === "admin" || role === "district_agent") && <FormModal table="agent" type="delete" id={item.AgentID} />}
+            {(role === "admin" || role === "district_agent" || role === "office_staff") && <FormModal table="agent" type="delete" id={item.AgentID} />}
           </div>
         </td>
       )}

@@ -15,5 +15,5 @@ export const routeAccessMap: RouteAccessMap = {
   "/list/agents": ["admin", "district_agent", "office_staff"],
   "/list/lotteries": ["admin", "district_agent", "office_staff"],
   "/list/staff": ["admin", "district_agent"],
-
+ 
 };
