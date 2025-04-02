@@ -25,58 +25,59 @@ const AdminPage = async () => {
     ongoingOrders: [
       {
         id: "0001",
-        customerName: "Mr. Sunil Wijesingha",
-        location: "Katugasthota",
+        customerName: "Sunil Wijesingha",
+        location: "Katugastota",
       },
       {
         id: "0002",
-        customerName: "Mr. Sunil",
-        location: "Katugasthota",
+        customerName: "Chandrasiri Perera",
+        location: "Nuwara",
       },
       {
         id: "0003",
-        customerName: "Mr. Sunil Wijesingha",
-        location: "Katugasthota",
+        customerName: "Anura Senanayaka",
+        location: "Matale",
       },
       {
         id: "0004",
-        customerName: "Mr. Sunil Wijesingha",
-        location: "Katugasthota",
+        customerName: "Nimal Gunaratne",
+        location: "Gampaha",
       },
       {
         id: "0005",
-        customerName: "Mr. Sunil Wijesingha",
-        location: "Katugasthota",
+        customerName: "Danushka Jayasingha",
+        location: "Colombo",
       },
     ],
     completedOrders: [
       {
         id: "0008",
-        customerName: "Mr. Sunil Wijesingha",
-        location: "Katugasthota",
+        customerName: "Saman Fernando",
+        location: "Dehiwala",
       },
       {
         id: "0009",
-        customerName: "Mr. Sunil Wijesingha",
-        location: "Katugasthota",
+        customerName: "Mahesh Peiris",
+        location: "Kadugamuwa",
       },
       {
         id: "0010",
-        customerName: "Mr. Sunil Wijesingha",
-        location: "Katugasthota",
+        customerName: "Kasun Wickramasingha",
+        location: "Ambalangoda",
       },
       {
         id: "0011",
-        customerName: "Mr. Sunil Wijesingha",
-        location: "Katugasthota",
+        customerName: "Lasantha Gamage",
+        location: "Bandarawela",
       },
       {
         id: "0012",
-        customerName: "Mr. Sunil Wijesingha",
-        location: "Katugasthota",
+        customerName: "Sanjaya Mendis",
+        location: "Panadura",
       },
     ],
   };
+  
 
     const user = await getUserData();
   

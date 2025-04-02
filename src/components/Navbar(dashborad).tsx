@@ -30,8 +30,13 @@ const Navbar = async () => {
           <span className='text-xs text-gray-500 text-right'>{user?.publicMetadata.role as string}</span>
         </div>
 
-        <UserButton />
-      </div>
+        <UserButton 
+          appearance={{
+          elements: {
+          avatarBox: 'w-12 h-12',
+        },
+  }} 
+/>      </div>
     </div>
   );
 };
