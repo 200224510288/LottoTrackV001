@@ -8,36 +8,32 @@ datasource db {
 }
 
 model User {
-  UserID   String     @id
-  Email    String  @unique
+  UserID   String @id
+  Email    String @unique
   UserName String
   Password String
-
   Agent    Agent?
   Staff    Staff?
 }
 
 model Agent {
-  AgentID       String     @id
-  FirstName     String
-  LastName      String
-  OfficeAddress String?
-  HomeAddress   String?
-  City          String
-
-  User  User   @relation(fields: [AgentID], references: [UserID])
-  Agent_Contact_Number   Agent_Contact_Number[]
-  Orders       Order[]
-
+  AgentID              String                 @id
+  FirstName            String
+  LastName             String
+  OfficeAddress        String?
+  HomeAddress          String?
+  City                 String
+  User                 User                   @relation(fields: [AgentID], references: [UserID])
+  Agent_Contact_Number Agent_Contact_Number[]
+  Orders               Order[]
 }
 
 model Agent_Contact_Number {
   AgentID       String
   ContactNumber String
+  Agent         Agent  @relation(fields: [AgentID], references: [AgentID])
 
-  Agent         Agent    @relation(fields: [AgentID], references: [AgentID])
-
-  @@id([AgentID, ContactNumber]) // Composite primary key for unique agent-number pairs
+  @@id([AgentID, ContactNumber])
 }
 
 model Staff {
@@ -46,74 +42,59 @@ model Staff {
   FirstName    String
   LastName     String
   SuperviserID Int?
-  
-  User         User   @relation(fields: [StaffID], references: [UserID])
-  Orders       Order[]
-  StockItems   Stock[]
   Deliveries   Delivery[]
   Lotteries    Lottery[]
-
-
+  Orders       Order[]
+  User         User       @relation(fields: [StaffID], references: [UserID])
+  StockItems   Stock[]
 }
 
-
 model Order {
-  OrderID         Int     @id @default(autoincrement())
-  AgentID         String
-  StaffID         String?
-  OrderDate       DateTime @default(now())
-  OrderTime       DateTime @default(now())
-  Status          String
-  TotalAmount     Float
-  TotalCommission Float
-
-  Agent           Agent   @relation(fields: [AgentID], references: [AgentID])
-  Staff           Staff?  @relation(fields: [StaffID], references: [StaffID])
-  Delivery        Delivery?
-  
+  OrderID            Int                     @id @default(autoincrement())
+  AgentID            String
+  StaffID            String?
+  OrderDate          DateTime                @default(now())
+  OrderTime          DateTime                @default(now())
+  Status             String
+  TotalAmount        Float
+  TotalCommission    Float
+  Delivery           Delivery?
+  Agent              Agent                   @relation(fields: [AgentID], references: [AgentID])
+  Staff              Staff?                  @relation(fields: [StaffID], references: [StaffID])
   ContainedLotteries Order_Contain_Lottery[]
-
 }
 
 model Delivery {
-  DeliveryID    Int   @id @default(autoincrement())
-  StaffID       String
-  OrderID       Int   @unique
-  NumberPlate   String
-  BusType       String?
-  ArrivalTime   DateTime?
-  DispatchTime  DateTime
-
-  Order         Order?  @relation(fields: [OrderID], references: [OrderID])  // Optional relation
-
-  Staff         Staff @relation(fields: [StaffID], references: [StaffID])
-
+  DeliveryID   Int       @id @default(autoincrement())
+  StaffID      String
+  OrderID      Int       @unique
+  NumberPlate  String
+  BusType      String?
+  ArrivalTime  DateTime?
+  DispatchTime DateTime
+  Order        Order     @relation(fields: [OrderID], references: [OrderID])
+  Staff        Staff     @relation(fields: [StaffID], references: [StaffID])
 }
- 
 
 model Lottery {
-  LotteryID        Int     @id @default(autoincrement()) 
-  StaffID          String
-  LotteryName      String
-  ImageUrl         String
-  DrawDate         DateTime
-  UnitPrice        Float
-  UnitCommission   Float
-  LastUpdateDate   DateTime @default(now())
-  Stock            Stock?
-  Staff            Staff   @relation(fields: [StaffID], references: [StaffID])
-  ContainedOrders  Order_Contain_Lottery[]
-
+  LotteryID       Int                     @id @default(autoincrement())
+  StaffID         String
+  LotteryName     String
+  ImageUrl        String
+  DrawDate        DateTime
+  UnitPrice       Float
+  UnitCommission  Float
+  LastUpdateDate  DateTime                @default(now())
+  LotteryType     String?
+  Staff           Staff                   @relation(fields: [StaffID], references: [StaffID])
+  ContainedOrders Order_Contain_Lottery[]
+  Stock           Stock?
 }
-
-
-
 
 model Order_Contain_Lottery {
   LotteryID Int
   OrderID   Int
   Quantity  Int
-
   Lottery   Lottery @relation(fields: [LotteryID], references: [LotteryID])
   Order     Order   @relation(fields: [OrderID], references: [OrderID])
 
@@ -121,11 +102,10 @@ model Order_Contain_Lottery {
 }
 
 model Stock {
-  StockID        Int     @id
+  StockID        Int      @id
   StaffID        String
   Availability   String
   LastUpdateDate DateTime @default(now())
-
-  Staff          Staff   @relation(fields: [StaffID], references: [StaffID])
-  Lottery        Lottery @relation(fields: [StockID], references: [LotteryID])
+  Staff          Staff    @relation(fields: [StaffID], references: [StaffID])
+  Lottery        Lottery  @relation(fields: [StockID], references: [LotteryID])
 }
