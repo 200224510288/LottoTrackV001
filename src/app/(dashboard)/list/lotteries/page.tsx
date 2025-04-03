@@ -54,6 +54,7 @@ const LotteryListPage = async ({ searchParams }: { searchParams: { [key: string]
     { header: "Draw Date", accessor: "DrawDate", className: "hidden md:table-cell" },
     { header: "Unit Price", accessor: "UnitPrice", className: "hidden md:table-cell" },
     { header: "Unit Commission", accessor: "UnitCommission", className: "hidden md:table-cell" },
+    { header: "Lottery Type", accessor: "Lotterytype", className: "hidden md:table-cell" },
     { header: "Image URL", accessor: "ImageUrl", className: "hidden md:table-cell" },
     { header: "Availability", accessor: "Stock.Availability", className: "hidden md:table-cell" },
     { header: "Last Update", accessor: "LastUpdateDate", className: "hidden md:table-cell" },
@@ -78,6 +79,9 @@ const LotteryListPage = async ({ searchParams }: { searchParams: { [key: string]
       <td className="hidden md:table-cell">{item.DrawDate ? new Date(item.DrawDate).toLocaleDateString() : "N/A"}</td>
       <td className="hidden md:table-cell">{item.UnitPrice ? `Rs ${item.UnitPrice.toFixed(2)}` : "N/A"}</td>
       <td className="hidden md:table-cell">{item.UnitCommission ? `Rs ${item.UnitCommission.toFixed(2)}` : "N/A"}</td>
+      <td className="hidden md:table-cell">
+        {item.LotteryType || "N/A"}
+      </td>
       <td className="hidden md:table-cell max-w-[140px] truncate overflow-hidden pr-8">
         {item.ImageUrl ? (
           <a href={item.ImageUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500">

@@ -324,6 +324,7 @@ export const createLottery = async (data: LotterySchema) => {
           DrawDate: data.DrawDate,
           UnitPrice: data.UnitPrice,
           UnitCommission: data.UnitCommission,
+          LotteryType: data.LotteryType,
           LastUpdateDate: data.LastUpdateDate ?? new Date(),
         },
       });
@@ -376,6 +377,7 @@ export const updateLottery = async (data: LotterySchema) => {
           DrawDate: data.DrawDate,
           UnitPrice: data.UnitPrice,
           UnitCommission: data.UnitCommission,
+          LotteryType: data.LotteryType,
           LastUpdateDate: new Date(),
         },
       });

@@ -141,6 +141,18 @@ const LotteryForm = ({
           register={register}
           error={errors.UnitCommission}
         />
+        
+        <SelectField
+          label="Lottery Type"
+          name="LotteryType"
+          register={register}
+          error={errors.LotteryType}
+          options={[
+            { value: "NLB", label: "NLB" },
+            { value: "DLB", label: "DLB" },
+            { value: "Instanse", label: "Instanse" },
+          ]}
+        />
 
         <SelectField
           label="Availability"

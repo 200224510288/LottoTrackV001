@@ -62,6 +62,7 @@ export const lotterySchema = z.object({
   StaffID: z.string().min(1, { message: "Staff ID is required!" }),
   LotteryName: z.string().min(1, { message: "Lottery Name is required!" }),
   Availability: z.string().min(1, { message: "Stock Availability Name is required!" }),
+  LotteryType: z.string().min(1, { message: "Lottery Type is required! (eg: NLB , DLB or instance)" }),
   ImageUrl: z.string().min(1, { message: "Image Link is required!" }),
   DrawDate: z.coerce.date().refine(date => date > new Date(), { message: "Draw Date must be in the future!" }),
   UnitPrice: z.coerce.number().positive({ message: "Unit Price must be a positive number!" }),
