@@ -83,8 +83,6 @@ export default function MyOrder() {
       </Head>
 
       <div className="ticket-container min-h-screen bg-cover bg-center overflow-hidden" style={{ backgroundImage: "url('/bg.png')" }}>
-        <Navbar />
-        <Cart />
 
         <h1 className="font-bold text-3xl mt-24 mb-10 ml-16 text-gray-600">MY ORDER</h1>
 
