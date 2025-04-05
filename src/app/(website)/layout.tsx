@@ -1,20 +1,21 @@
-import Link from "next/link";
-import Image from "next/image"; // Import Image from next/image
-import Menu from "@/components/Menu";
+"use client";
+
 import Navbar from "@/components/Navbar";
 import Cart from "@/components/Cart";
+import { CartProvider } from "@/components/CartContext"; 
 
-// Define the type for the props
 interface DashboardLayoutProps {
-  children: React.ReactNode; // Define children prop type as React.ReactNode
+  children: React.ReactNode;
 }
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
-    <div className="">
+    <CartProvider>
+      <div className="">
         <Navbar />
         <Cart />
         {children}
       </div>
+    </CartProvider>
   );
 }

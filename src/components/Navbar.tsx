@@ -44,9 +44,9 @@ const Navbar = () => {
           {/* Desktop Menu */}
           <div className="hidden custom-md:flex space-x-6 flex-grow justify-center">
             <Link
-              href="/Homepage"
+              href="/agent"
               className={`text-gray-700 p-5 hover:text-NavBlue ${
-                pathname.startsWith("/Homepage")
+                pathname.startsWith("/agent")
                   ? "bg-NavBlue p-5 rounded text-white font-semibold border-b-2 border-blue-700 hover:text-white"
                   : ""
               }`}
@@ -65,16 +65,7 @@ const Navbar = () => {
               My Order
             </Link>
 
-            <Link
-              href="/StockAvailability"
-              className={`text-gray-700 p-5 hover:text-NavBlue ${
-                pathname.startsWith("/StockAvailability")
-                  ? "bg-NavBlue p-5 rounded text-white font-semibold border-b-2 border-blue-700 hover:text-white"
-                  : ""
-              }`}
-            >
-              Stock Availability
-            </Link>
+         
 
             <Link
               href="/OrderHistory"

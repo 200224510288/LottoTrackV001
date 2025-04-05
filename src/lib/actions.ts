@@ -7,6 +7,86 @@ import prisma from "./prisma";
 import { error } from "console";
 import { boolean } from "zod";
 import { z } from "zod";
+import { CartItem } from "@/components/CartContext"; 
+
+type DeliveryInfo = {
+  deliveryOption: "selfPick" | "dispatch";
+  busStop?: string;
+};
+
+export const createOrder = async (
+  agentID: string,
+  cartItems: CartItem[],
+  deliveryInfo: DeliveryInfo
+) => {
+  try {
+    // Calculate totals
+    const totalAmount = cartItems.reduce(
+      (sum, item) => sum + (item.ticket.UnitPrice || 0) * item.quantity,
+      0
+    );
+    
+    const totalCommission = cartItems.reduce(
+      (sum, item) => sum + (item.ticket.UnitCommission || 0) * item.quantity,
+      0
+    );
+
+    // Create the order and its relationships in a transaction
+    const result = await prisma.$transaction(async (tx) => {
+      // Step 1: Create the order
+      const newOrder = await tx.order.create({
+        data: {
+          AgentID: agentID,
+          OrderDate: new Date(),
+          OrderTime: new Date(),
+          Status: "Pending", // Initial status
+          TotalAmount: totalAmount,
+          TotalCommission: totalCommission,
+        },
+      });
+
+      // Step 2: Create order_contain_lottery entries for each item
+      for (const item of cartItems) {
+        await tx.order_Contain_Lottery.create({
+          data: {
+            OrderID: newOrder.OrderID,
+            LotteryID: item.ticket.LotteryID,
+            Quantity: item.quantity,
+          },
+        });
+      }
+
+      // Step 3: If delivery option is "dispatch", create delivery entry 
+      if (deliveryInfo.deliveryOption === "dispatch" && deliveryInfo.busStop) {
+        await tx.delivery.create({
+          data: {
+            OrderID: newOrder.OrderID,
+            StaffID: "user_2u9IzPhBE1W70P7QuUSpQN0o6AL", // staff ID as admin
+            NumberPlate: "TBD",      
+            BusType: deliveryInfo.busStop,
+            DispatchTime: new Date(Date.now() + 24 * 60 * 60 * 1000), 
+          },
+        });
+      }
+
+      return newOrder;
+    });
+
+    return { 
+      success: true, 
+      error: false, 
+      order: result 
+    };
+  } catch (err: any) {
+    console.error("Create Order Error:", err);
+    const errorMessage = err.message || "An error occurred during checkout";
+    return { 
+      success: false, 
+      error: true, 
+      message: errorMessage 
+    };
+  }
+};
 
 
 type CurrentState = { success: boolean; error: boolean };

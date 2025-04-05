@@ -2,11 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
-import Navbar from "@/components/Navbar";
-import Cart from "@/components/Cart";
 import Image from "next/image";
 import { Prisma } from "@prisma/client";
 import { useSession } from "@clerk/nextjs";
+import { useCart } from "@/components/CartContext"; 
 
 type LotteryWithStock = Prisma.LotteryGetPayload<{
   include: {
@@ -17,17 +16,19 @@ type LotteryWithStock = Prisma.LotteryGetPayload<{
 export default function AgentLotteryView() {
   const [nlbTickets, setNlbTickets] = useState<LotteryWithStock[]>([]);
   const [dlbTickets, setDlbTickets] = useState<LotteryWithStock[]>([]);
-  const [cartItems, setCartItems] = useState<Map<number, number>>(new Map());
   const [quantities, setQuantities] = useState<Map<number, number>>(new Map());
   const [loading, setLoading] = useState(true);
   const [searchDate, setSearchDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const { session } = useSession();
   const role = session?.user.publicMetadata?.role;
+  
+  // Use our cart context
+  const { addToCart } = useCart();
 
   useEffect(() => {
     document.title = "Agent Lottery View";
     fetchLotteryData(searchDate);
-  }, []);
+  }, [searchDate]);
 
   const fetchLotteryData = async (date: string) => {
     try {
@@ -62,12 +63,10 @@ export default function AgentLotteryView() {
   const handleAddToCart = (ticket: LotteryWithStock) => {
     const quantity = quantities.get(ticket.LotteryID) || 0;
     if (quantity > 0) {
-      setCartItems(prev => {
-        const newCart = new Map(prev);
-        const currentQuantity = newCart.get(ticket.LotteryID) || 0;
-        newCart.set(ticket.LotteryID, currentQuantity + quantity);
-        return newCart;
-      });
+      // Use the addToCart function from context
+      addToCart(ticket, quantity);
+      
+      // Reset quantity input after adding to cart
       setQuantities(prev => {
         const newQuantities = new Map(prev);
         newQuantities.set(ticket.LotteryID, 0);
@@ -106,7 +105,6 @@ export default function AgentLotteryView() {
         <title>Agent Lottery View</title>
         <meta name="description" content="Agent view of lottery tickets" />
       </Head>
-
 
       <div className="ticket-container fixed left-0 top-10 p-6 w-3/4 overflow-y-auto max-h-screen bg-cover bg-center" style={{ backgroundImage: "url('/bg.png')" }}>
         <div className="flex flex-col sm:flex-row gap-4 items-center ml-10 mt-10">
