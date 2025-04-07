@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { AgentSchema, LotterySchema, StaffSchema, staffSchema } from "./formValidationSchemas";
-import { clerkClient } from "@clerk/clerk-sdk-node"; // Clerk SDK for Node.js
+import { clerkClient } from "@clerk/clerk-sdk-node";  
 import prisma from "./prisma";
 import { error } from "console";
 import { boolean } from "zod";

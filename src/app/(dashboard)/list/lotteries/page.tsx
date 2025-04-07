@@ -45,7 +45,6 @@ const LotteryListPage = async ({ searchParams }: { searchParams: { [key: string]
     ]);
   } catch (error) {
     console.error("Error fetching lottery data: ", error);
-    // You can handle the error more gracefully here, such as setting an error state
   }
 
   const columns = [

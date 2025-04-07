@@ -20,7 +20,7 @@ const Cart = () => {
   const router = useRouter();
   const { session } = useSession();
   
-  // Use our cart context
+  // Use  cart context
   const { 
     cartItems, 
     removeFromCart, 

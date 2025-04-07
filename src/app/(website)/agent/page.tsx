@@ -22,7 +22,7 @@ export default function AgentLotteryView() {
   const { session } = useSession();
   const role = session?.user.publicMetadata?.role;
   
-  // Use our cart context
+  // Use cart context
   const { addToCart } = useCart();
 
   useEffect(() => {

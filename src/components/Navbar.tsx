@@ -117,8 +117,8 @@ const Navbar = () => {
             >
               Home
             </Link>
-            <Link href="/StockAvailability" className="block text-gray-700 hover:text-blue-600">
-              Stock Availability
+            <Link href="/MyOrder" className="block text-gray-700 hover:text-blue-600">
+              My Order
             </Link>
             <Link href="/OrderHistory" className="block text-gray-700 hover:text-blue-600">
               Order History
