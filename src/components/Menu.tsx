@@ -13,7 +13,7 @@ const menuItems = [
       { icon: "/order1.png", label: "View Orders", href: "/list/orders", visible: ["office_staff", "admin", "district_agent"] },
       { icon: "/agents1.png", label: "Agents", href: "/list/agents", visible: ["office_staff", "admin"] },
       { icon: "/ticket2.png", label: "Lotteries", href: "/list/lotteries", visible: ["office_staff", "admin", "district_agent"] },
-      { icon: "/history1.png", label: "History", href: "/list/orders", visible: ["office_staff", "admin", "district_agent"] },
+      { icon: "/history1.png", label: "History", href: "/list/history", visible: ["office_staff", "admin", "district_agent"] },
       { icon: "/stock1.png", label: "Stock", href: "/list/stocks", visible: ["office_staff", "admin", "district_agent"] },
       { icon: "/addAgent1.png", label: "Office Staff", href: "/list/staff", visible: ["admin", "district_agent"] }
     ],

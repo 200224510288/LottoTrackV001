@@ -73,8 +73,8 @@ const ClientOrderTable = ({ orders: initialOrders, columns, role }: ClientOrderT
     <tr key={item.OrderID} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-PurpleLight">
       <td className="p-4 font-semibold">{item.OrderID || "N/A"}</td>
       <td>{item.Agent?.FirstName} {item.Agent?.LastName || "N/A"}</td>
-      <td className="font-medium">{item.totalQuantity}</td>
-      <td className="font-medium">Rs {item.TotalAmount.toFixed(2)}</td>
+      <td className="font-medium hidden md:table-cell">{item.totalQuantity}</td>
+      <td className="font-medium hidden md:table-cell">Rs {item.TotalAmount.toFixed(2)}</td>
       <td className="hidden md:table-cell">
         {item.OrderTime ? new Date(item.OrderTime).toLocaleString() : "N/A"}
       </td>

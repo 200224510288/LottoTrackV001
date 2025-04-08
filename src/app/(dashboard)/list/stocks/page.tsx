@@ -19,6 +19,10 @@ export default function StaffLotteryView() {
   const { session } = useSession();
   const role = session?.user.publicMetadata?.role;
 
+ // Get today's date in YYYY-MM-DD format for the min attribute
+ const today = new Date().toISOString().split('T')[0];
+
+
   useEffect(() => {
     document.title = "Staff Lottery Availability";
     fetchLotteryData(searchDate);
@@ -46,8 +50,17 @@ export default function StaffLotteryView() {
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchDate(e.target.value);
+    const selectedDate = e.target.value;
+    
+    // Prevent selecting dates before today
+    if (selectedDate >= today) {
+      setSearchDate(selectedDate);
+    } else {
+      // If user somehow selects a past date, reset to today
+      setSearchDate(today);
+    }
   };
+  
 
   const handleSearch = () => {
     fetchLotteryData(searchDate);
@@ -76,6 +89,7 @@ export default function StaffLotteryView() {
             className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-NavBlue focus:border-NavBlue w-full sm:w-auto"
             value={searchDate}
             onChange={handleDateChange}
+            min={today} // Prevent selecting past dates
           />
           <button 
             className="hidden md:table-cell bg-NavBlue hover:bg-NavBlueDark text-white px-6 py-2 rounded-md transition-colors font-medium flex items-center gap-2"

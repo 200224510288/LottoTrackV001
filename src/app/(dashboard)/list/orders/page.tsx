@@ -78,9 +78,9 @@ const OrderListPage = async ({ searchParams }: { searchParams: { [key: string]: 
 
   const columns = [
     { header: "Order ID", accessor: "OrderID" },
-    { header: "Agent Name", accessor: "AgentName" },
-    { header: "Total Quantity", accessor: "TotalQuantity" },
-    { header: "Total Amount", accessor: "TotalAmount" },
+    { header: "Agent Name", accessor: "AgentName"},
+    { header: "Total Quantity", accessor: "TotalQuantity",className: "hidden md:table-cell"},
+    { header: "Total Amount", accessor: "TotalAmount", className: "hidden md:table-cell" },
     { header: "Ordered Time", accessor: "OrderTime", className: "hidden md:table-cell" },
     { header: "Type", accessor: "DeliveryType", className: "hidden md:table-cell" },
     { header: "City", accessor: "City", className: "hidden md:table-cell" },

@@ -22,6 +22,9 @@ export default function AgentLotteryView() {
   const { session } = useSession();
   const role = session?.user.publicMetadata?.role;
   
+ // Get today's date in YYYY-MM-DD format for the min attribute
+ const today = new Date().toISOString().split('T')[0];
+
   // Use cart context
   const { addToCart } = useCart();
 
@@ -76,7 +79,15 @@ export default function AgentLotteryView() {
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchDate(e.target.value);
+    const selectedDate = e.target.value;
+    
+    // Prevent selecting dates before today
+    if (selectedDate >= today) {
+      setSearchDate(selectedDate);
+    } else {
+      // If user somehow selects a past date, reset to today
+      setSearchDate(today);
+    }
   };
 
   const handleSearch = () => {
@@ -115,6 +126,7 @@ export default function AgentLotteryView() {
               className="p-2 border border-gray-300 rounded focus:ring-2 focus:ring-NavBlue focus:border-transparent"
               value={searchDate}
               onChange={handleDateChange}
+              min={today} // Prevent selecting past dates
             />
             <button 
               className="search-btn-agent bg-NavBlue hover:bg-NavBlueDark text-white px-4 py-2 rounded transition-colors"
