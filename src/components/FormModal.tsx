@@ -1,5 +1,5 @@
 "use client"
-import { createAgent, deleteAgent, deleteLottery, deleteStaff, updateAgent } from '@/lib/actions';
+import { createAgent, deleteAgent, deleteLottery, deleteOrder, deleteStaff, updateAgent } from '@/lib/actions';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';  // Import Image from next/image
 import { useRouter } from 'next/navigation';
@@ -12,10 +12,14 @@ import { FormContainerProps } from './FormContainer';
 
 
 const deleteActionMap = {
-  agent: deleteAgent,
-  staff: deleteStaff,
-  lottery: deleteLottery,
-}
+  agent: (prevState: any, formData: FormData) => deleteAgent(prevState, formData),
+  staff: (prevState: any, formData: FormData) => deleteStaff(prevState, formData),
+  lottery: (prevState: any, formData: FormData) => deleteLottery(prevState, formData),
+  order: (prevState: any, formData: FormData) => {
+    const orderID = formData.get('id') as string;
+    return deleteOrder(orderID);
+  },
+};
 
 const AgentForm = dynamic(()=>import('./forms/AgentForm'),{
     loading: ()=><h1>Loading...</h1>

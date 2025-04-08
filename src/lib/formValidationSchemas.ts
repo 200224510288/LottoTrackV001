@@ -64,8 +64,12 @@ export const lotterySchema = z.object({
   Availability: z.string().min(1, { message: "Stock Availability Name is required!" }),
   LotteryType: z.string().min(1, { message: "Lottery Type is required! (eg: NLB , DLB or instance)" }),
   ImageUrl: z.string().min(1, { message: "Image Link is required!" }),
-  DrawDate: z.coerce.date().refine(date => date > new Date(), { message: "Draw Date must be in the future!" }),
-  UnitPrice: z.coerce.number().positive({ message: "Unit Price must be a positive number!" }),
+  DrawDate: z.coerce.date().refine(date => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); 
+    return date >= today;
+  }, { message: "Draw Date must be today or in the future!" }),
+    UnitPrice: z.coerce.number().positive({ message: "Unit Price must be a positive number!" }),
   UnitCommission: z.coerce.number().positive({ message: "Unit Commission must be a positive number!" }),
   LastUpdateDate: z.coerce.date().optional().default(() => new Date()), // Defaults to current date if not provided
 });

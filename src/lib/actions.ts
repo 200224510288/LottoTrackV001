@@ -89,6 +89,51 @@ export const createOrder = async (
 };
 
 
+export const deleteOrder = async (orderID: string) => {
+  try {
+    await prisma.$transaction(async (tx) => {
+      // Step 1: Delete from the delivery table if related to this order
+      await tx.delivery.deleteMany({
+        where: {
+          OrderID: Number(orderID),
+        },
+      });
+
+      // Step 2: Delete associated order_Contain_Lottery entries
+      await tx.order_Contain_Lottery.deleteMany({
+        where: {
+          OrderID: Number(orderID),
+        },
+      });
+
+      // Step 3: Delete the main order
+      await tx.order.delete({
+        where: {
+          OrderID: Number(orderID),
+        },
+      });
+    });
+
+    return {
+      success: true,
+      error: false,
+      message: "Order and all related data deleted successfully.",
+    };
+  } catch (err: any) {
+    console.error("Delete Order Error:", err);
+    return {
+      success: false,
+      error: true,
+      message: err.message || "Failed to delete the order.",
+    };
+  }
+};
+
+
+
+
+
+
 type CurrentState = { success: boolean; error: boolean };
 
 export const createAgent = async (currentState: CurrentState, data: AgentSchema) => {

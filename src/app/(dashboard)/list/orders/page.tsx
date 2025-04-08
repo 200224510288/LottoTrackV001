@@ -6,9 +6,12 @@ import { Prisma, Order, Delivery, Staff, Agent } from "@prisma/client";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import FormModal from "@/components/FormModal";
+import ClientOrderTable from "@/components/ClientOrderTable";
+
+// This remains a server component
 
 type OrderWithRelations = Order & { 
-  Delivery: Delivery | null; 
+  Delivery: { BusType: string } | null; 
   Staff: Staff | null; 
   Agent: Agent | null;
   ContainedLotteries: {
@@ -18,7 +21,7 @@ type OrderWithRelations = Order & {
       UnitPrice: number;
     };
   }[];
-  totalQuantity: number; // New field to store the total quantity
+  totalQuantity: number;
 };
 
 const OrderListPage = async ({ searchParams }: { searchParams: { [key: string]: string | undefined } }) => {
@@ -82,35 +85,10 @@ const OrderListPage = async ({ searchParams }: { searchParams: { [key: string]: 
     { header: "Type", accessor: "DeliveryType", className: "hidden md:table-cell" },
     { header: "City", accessor: "City", className: "hidden md:table-cell" },
     { header: "Staff Name", accessor: "StaffName", className: "hidden md:table-cell" },
-    ...(role === "admin" || role === "district_agent" || role === "office_staff"
+    ...(role === "admin" || role === "district_agent" || role === "office_staff" || role === "agent"
       ? [{ header: "Actions", accessor: "actions" }]
       : []),
   ];
-
-  const renderRow = (item: OrderWithRelations) => (
-    <tr key={item.OrderID} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-PurpleLight">
-      <td className="p-4 font-semibold">{item.OrderID || "N/A"}</td>
-      <td>{item.Agent?.FirstName} {item.Agent?.LastName || "N/A"}</td>
-      <td className="font-medium">{item.totalQuantity}</td>
-      <td className="font-medium">Rs {item.TotalAmount.toFixed(2)}</td>
-      <td className="hidden md:table-cell">
-        {item.OrderTime ? new Date(item.OrderTime).toLocaleString() : "N/A"}
-      </td>
-      <td className="hidden md:table-cell">{item.Delivery?.BusType || "N/A"}</td>
-      <td className="hidden md:table-cell"> {item.Agent?.City || "N/A"}</td>
-
-      <td className="hidden md:table-cell">{item.Staff?.FirstName} {item.Staff?.LastName || "N/A"}</td>
-
-      {role && (
-        <td>
-          <div className="flex items-center gap-2">
-            {(role === "admin" || role === "district_agent" || role === "office_staff") && 
-              <FormModal table="agent" type="delete" id={item.OrderID} />}
-          </div>
-        </td>
-      )}
-    </tr>
-  );
 
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
@@ -118,11 +96,9 @@ const OrderListPage = async ({ searchParams }: { searchParams: { [key: string]: 
         <h1 className="hidden md:block text-lg font-semibold">All Orders</h1>
         <div className="flex items-center gap-4">
           <TableSearch />
-          {(role === "admin" || role === "district_agent" || role === "office_staff") && 
-            <FormModal table="agent" type="create" />}
         </div>
       </div>
-      <Table columns={columns} renderRow={renderRow} data={data} />
+      <ClientOrderTable orders={data} columns={columns} role={role || ""} />
       <Pagination page={p} count={count} />
     </div>
   );
