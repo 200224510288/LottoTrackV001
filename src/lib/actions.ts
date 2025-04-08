@@ -134,6 +134,12 @@ export const deleteOrder = async (orderID: string) => {
 
 
 
+
+
+
+
+
+
 type CurrentState = { success: boolean; error: boolean };
 
 export const createAgent = async (currentState: CurrentState, data: AgentSchema) => {
@@ -556,5 +562,75 @@ export const deleteLottery = async (currentState: CurrentState, data: FormData) 
     console.error("Deletion failed:", err);
     const errorMessages = err.errors?.map((e: any) => e.message).join(" ") || "An unknown error occurred.";
     return { success: false, error: true, message: errorMessages };
+  }
+};
+
+
+
+
+
+type UpdateOrderData = {
+  OrderID: number;
+  TotalAmount: number;
+  ContainedLotteries: {
+    Quantity: number;
+    Lottery: {
+      LotteryID: number;
+      LotteryName: string;
+      UnitPrice: number;
+    };
+  }[];
+};
+
+export const updateOrder = async (orderData: UpdateOrderData) => {
+  try {
+    // Start a transaction to ensure all updates happen together
+    const result = await prisma.$transaction(async (tx) => {
+      // Step 1: Update the main order with the new total amount
+      const updatedOrder = await tx.order.update({
+        where: {
+          OrderID: orderData.OrderID
+        },
+        data: {
+          TotalAmount: orderData.TotalAmount
+        }
+      });
+
+      // Step 2: Update each lottery quantity in the order
+      for (const item of orderData.ContainedLotteries) {
+        await tx.order_Contain_Lottery.update({
+          where: {
+            LotteryID_OrderID: {
+              OrderID: orderData.OrderID,
+              LotteryID: item.Lottery.LotteryID
+            }
+          },
+          data: {
+            Quantity: item.Quantity
+          }
+        });
+      }
+
+      return updatedOrder;
+    });
+
+    // Revalidate the orders page to show updated data
+    revalidatePath('/list/orders');
+
+    return {
+      success: true,
+      error: false,
+      order: result,
+      message: "Order updated successfully"
+    };
+  } catch (err: any) {
+    console.error("Update Order Error:", err);
+    const errorMessage = err.message || "An error occurred while updating the order";
+    
+    return {
+      success: false,
+      error: true,
+      message: errorMessage
+    };
   }
 };

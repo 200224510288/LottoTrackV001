@@ -1,12 +1,10 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Table from "@/components/Table";
 import FormModal from "@/components/FormModal";
 import OrderLotteriesModal from "@/components/OrderLotteriesModal";
-import Image from 'next/image';  // Import Image from next/image
-
-
+import Image from 'next/image';
 
 type OrderWithRelations = {
   OrderID: number;
@@ -27,6 +25,7 @@ type OrderWithRelations = {
   ContainedLotteries: {
     Quantity: number;
     Lottery: {
+      LotteryID: number;
       LotteryName: string;
       UnitPrice: number;
     };
@@ -40,13 +39,34 @@ interface ClientOrderTableProps {
   role: string;
 }
 
-const ClientOrderTable = ({ orders, columns, role }: ClientOrderTableProps) => {
+const ClientOrderTable = ({ orders: initialOrders, columns, role }: ClientOrderTableProps) => {
+  const [orders, setOrders] = useState<OrderWithRelations[]>(initialOrders);
   const [selectedOrder, setSelectedOrder] = useState<OrderWithRelations | null>(null);
   const [isLotteriesModalOpen, setIsLotteriesModalOpen] = useState(false);
+
+  // Update local state when prop changes
+  useEffect(() => {
+    setOrders(initialOrders);
+  }, [initialOrders]);
 
   const handleViewLotteries = (order: OrderWithRelations) => {
     setSelectedOrder(order);
     setIsLotteriesModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsLotteriesModalOpen(false);
+    setSelectedOrder(null);
+  };
+
+  // Handle order updates in client-side cache
+  const handleOrderUpdate = (updatedOrder: OrderWithRelations) => {
+    // Update the client-side cache of orders
+    setOrders(prevOrders => 
+      prevOrders.map(order => 
+        order.OrderID === updatedOrder.OrderID ? updatedOrder : order
+      )
+    );
   };
 
   const renderRow = (item: OrderWithRelations) => (
@@ -66,12 +86,11 @@ const ClientOrderTable = ({ orders, columns, role }: ClientOrderTableProps) => {
         <td>
           <div className="flex items-center gap-2">
             <button
-                      className={`w-7 h-7 flex items-center justify-center rounded-full bg-DashboardBlue hover:bg-blue-600`}
-                      onClick={() => handleViewLotteries(item)}
-                    >
-                      <Image src={`/eye.png`} alt="" width={20} height={20} />
-                                       
-                    </button>
+              className="w-7 h-7 flex items-center justify-center rounded-full bg-DashboardBlue hover:bg-blue-600"
+              onClick={() => handleViewLotteries(item)}
+            >
+              <Image src="/eye.png" alt="View" width={20} height={20} />
+            </button>
             
             {(role === "admin" || role === "district_agent" || role === "office_staff") && 
               <FormModal table="order" type="delete" id={item.OrderID} />}
@@ -89,10 +108,7 @@ const ClientOrderTable = ({ orders, columns, role }: ClientOrderTableProps) => {
         <OrderLotteriesModal
           order={selectedOrder}
           isOpen={isLotteriesModalOpen}
-          onClose={() => {
-            setIsLotteriesModalOpen(false);
-            setSelectedOrder(null);
-          }}
+          onClose={handleCloseModal}
         />
       )}
     </>
