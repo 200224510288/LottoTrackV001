@@ -50,7 +50,7 @@ export default function AgentLotteryView() {
       setLoading(false);
     }
   };
-
+ 
   const handleQuantityChange = (ticketId: number, value: number) => {
     setQuantities(prev => {
       const newQuantities = new Map(prev);
