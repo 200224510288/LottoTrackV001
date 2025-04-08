@@ -34,6 +34,16 @@ export default function MyOrder() {
         OrderID: 601,
         price: "RS.38,400",
       },
+      {
+        name: "MR. Remand Daramasena",
+        OrderID: 601,
+        price: "RS.38,400",
+      },
+      {
+        name: "MR. Remand Daramasena",
+        OrderID: 601,
+        price: "RS.38,400",
+      },
     ];
 
     const ongoingOrdersData = orderData.map(order => ({
@@ -84,26 +94,17 @@ export default function MyOrder() {
 
       <div className="ticket-container min-h-screen bg-cover bg-center overflow-hidden" style={{ backgroundImage: "url('/bg.png')" }}>
 
-        <h1 className="font-bold text-3xl mt-24 mb-10 ml-16 text-gray-600">MY ORDER</h1>
-
-        {/* New Box on Top */}
-        <div className="mx-16 mb-8 flex">
-          <div className="bg-gray-300 p-4 rounded-lg shadow-lg w-1/4">
-            <h2 className="text-lg mt-5 font-bold mb-4 flex items-center gap-2 text-gray-600">
-              <Bus size={30} />Bus
-            </h2>
-          </div>
-        </div>
+        <h1 className="font-bold text-3xl mt-28 mb-10 ml-16 text-gray-600">MY ORDER</h1>
 
         {/* Flex container for the order boxes */}
-        <div className="flex gap-8 mx-16 mb-16 flex-wrap w-full sm:w-2/3">
-          <div className="flex-1 bg-gray-200 p-8 rounded-lg shadow-lg overflow-y-auto max-h-80">
+        <div className="order-box-container flex gap-8 mx-16 mb-16 flex-wrap w-full sm:w-2/3">
+          <div className="flex-1 bg-gray-200 p-8 rounded-lg shadow-lg overflow-y-auto max-h-[calc(100vh-16rem)]">
             <h2 className="text-xl font-semibold mb-5 text-gray-600">Ongoing Orders</h2>
             {renderOrders(ongoingOrders)}
           </div>
 
-          <div className="flex-1 bg-gray-200 p-8 rounded-lg shadow-lg overflow-y-auto max-h-80">
-            <h2 className="text-xl font-semibold mb-5 text-gray-600">Dispatched Orders</h2>
+          <div className="flex-1 bg-gray-200 p-8 rounded-lg shadow-lg overflow-y-auto max-h-[calc(100vh-16rem)">
+            <h2 className="text-xl font-semibold mb-5 text-gray-600">Completed Orders</h2>
             {renderOrders(dispatchedOrders)}
           </div>
         </div>
@@ -118,6 +119,16 @@ export default function MyOrder() {
             width: 100%;
           }
         }
+
+         @media (max-width: 430px) {
+    .order-box-container {
+      margin-left: 1rem;
+      margin-right: 2rem;
+   
+    }
+    h1 {
+      margin-left: 1rem;
+    }
       `}</style>
     </>
   );

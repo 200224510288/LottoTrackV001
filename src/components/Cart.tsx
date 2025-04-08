@@ -1,33 +1,43 @@
 "use client";
 
-import { ShoppingCart, Bus, X, Minus, Plus, AlertCircle, Check, ArrowLeft } from "lucide-react";
+import {
+  ShoppingCart,
+  Bus,
+  X,
+  Minus,
+  Plus,
+  AlertCircle,
+  Check,
+  ArrowLeft,
+} from "lucide-react";
 import React, { useState } from "react";
-import Image from 'next/image';
+import Image from "next/image";
 import { useCart } from "@/components/CartContext";
 import { useRouter } from "next/navigation";
 import { useSession } from "@clerk/nextjs";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
-       
 const Cart = () => {
-  const [deliveryOption, setDeliveryOption] = useState<"selfPick" | "dispatch">("selfPick");
+  const [deliveryOption, setDeliveryOption] = useState<"selfPick" | "dispatch">(
+    "selfPick"
+  );
   const [busStop, setBusStop] = useState<string>("centralStation");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [orderDetails, setOrderDetails] = useState<any>(null);
-  
+
   const router = useRouter();
   const { session } = useSession();
-  
+
   // Use  cart context
-  const { 
-    cartItems, 
-    removeFromCart, 
-    updateQuantity, 
-    clearCart, 
-    getSubtotal, 
-    getTotalCommission 
+  const {
+    cartItems,
+    removeFromCart,
+    updateQuantity,
+    clearCart,
+    getSubtotal,
+    getTotalCommission,
   } = useCart();
 
   const handleCheckout = async () => {
@@ -40,18 +50,18 @@ const Cart = () => {
       setIsSubmitting(true);
       setError(null);
 
-      const response = await fetch('/api/checkout', {
-        method: 'POST',
+      const response = await fetch("/api/checkout", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           cartItems: cartItems,
           deliveryInfo: {
             deliveryOption,
-            busStop: deliveryOption === "dispatch" ? busStop : undefined
-          }
-        })
+            busStop: deliveryOption === "dispatch" ? busStop : undefined,
+          },
+        }),
       });
 
       const data = await response.json();
@@ -90,7 +100,7 @@ const Cart = () => {
       <div className="cart-container fixed right-0 top-10 h-full w-1/4 bg-white text-gray-700 shadow-xl flex flex-col items-center py-6 overflow-y-auto max-h-screen">
         <div className="w-full px-4">
           <div className="flex items-center justify-between mb-4">
-            <button 
+            <button
               onClick={backToCart}
               className="text-gray-500 hover:text-gray-700 flex items-center"
             >
@@ -104,7 +114,9 @@ const Cart = () => {
             <Check className="text-green-500 mr-2" size={20} />
             <div>
               <p className="font-medium text-green-700">Order Created!</p>
-              <p className="text-sm text-green-600">Order ID: {orderDetails.OrderID}</p>
+              <p className="text-sm text-green-600">
+                Order ID: {orderDetails.OrderID}
+              </p>
             </div>
           </div>
 
@@ -121,12 +133,16 @@ const Cart = () => {
               </div>
               <div className="flex justify-between">
                 <span>Delivery Method:</span>
-                <span>{deliveryOption === "selfPick" ? "Self Pick" : "Dispatch"}</span>
+                <span>
+                  {deliveryOption === "selfPick" ? "Self Pick" : "Dispatch"}
+                </span>
               </div>
               {deliveryOption === "dispatch" && (
                 <div className="flex justify-between">
                   <span>Bus Stop:</span>
-                  <span>{busStop === "centralStation" ? "CTB" : "Private"}</span>
+                  <span>
+                    {busStop === "centralStation" ? "CTB" : "Private"}
+                  </span>
                 </div>
               )}
             </div>
@@ -136,12 +152,20 @@ const Cart = () => {
             <h3 className="font-medium mb-2">Items</h3>
             <div className="space-y-3 max-h-48 overflow-y-auto">
               {cartItems.map((item) => (
-                <div key={item.ticket.LotteryID} className="flex justify-between text-sm border-b pb-2">
+                <div
+                  key={item.ticket.LotteryID}
+                  className="flex justify-between text-sm border-b pb-2"
+                >
                   <div>
                     <p className="font-medium">{item.ticket.LotteryName}</p>
-                    <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
+                    <p className="text-xs text-gray-500">
+                      Qty: {item.quantity}
+                    </p>
                   </div>
-                  <span>Rs {((item.ticket.UnitPrice || 0) * item.quantity).toFixed(2)}</span>
+                  <span>
+                    Rs{" "}
+                    {((item.ticket.UnitPrice || 0) * item.quantity).toFixed(2)}
+                  </span>
                 </div>
               ))}
             </div>
@@ -176,7 +200,7 @@ const Cart = () => {
       )}
 
       {/* Delivery Options */}
-      <div className="w-full flex justify-center gap-2 mb-4 text-sm">
+      <div className="w-full flex justify-center gap-44 mb-4 text-sm">
         <label className="flex items-center gap-2">
           <input
             type="radio"
@@ -209,14 +233,15 @@ const Cart = () => {
           <select
             value={busStop}
             onChange={(e) => setBusStop(e.target.value)}
-            className={`w-full p-2 pl-2 pr-8 appearance-none rounded border border-gray-300 ${
-              deliveryOption === "selfPick" ? "opacity-50 cursor-not-allowed" : ""
+            className={`w-full h-14 p-2 pl-2 pr-8 appearance-none rounded border border-gray-300 ${
+              deliveryOption === "selfPick"
+                ? "opacity-50 cursor-not-allowed"
+                : ""
             }`}
             disabled={deliveryOption === "selfPick"}
           >
             <option value="centralStation">CTB</option>
             <option value="mainStreet">Private</option>
-          
           </select>
           {/* Custom dropdown arrow */}
           <svg
@@ -248,12 +273,15 @@ const Cart = () => {
           </div>
         ) : (
           cartItems.map((item) => (
-            <div key={item.ticket.LotteryID} className="flex flex-col p-2 mb-4 border-b border-gray-200">
+            <div
+              key={item.ticket.LotteryID}
+              className="flex flex-col p-2 mb-4 border-b border-gray-200"
+            >
               <div className="flex justify-between items-start">
                 <div className="flex items-center gap-2">
                   <div className="w-12 h-12 overflow-hidden rounded">
-                    <Image 
-                      src={item.ticket.ImageUrl || "/default-image.png"} 
+                    <Image
+                      src={item.ticket.ImageUrl || "/default-image.png"}
                       alt={item.ticket.LotteryName}
                       width={48}
                       height={48}
@@ -261,29 +289,37 @@ const Cart = () => {
                     />
                   </div>
                   <div>
-                    <h3 className="font-medium text-sm">{item.ticket.LotteryName}</h3>
-                    <p className="text-xs text-gray-500">Rs {item.ticket.UnitPrice?.toFixed(2)} per unit</p>
+                    <h3 className="font-medium text-sm">
+                      {item.ticket.LotteryName}
+                    </h3>
+                    <p className="text-xs text-gray-500">
+                      Rs {item.ticket.UnitPrice?.toFixed(2)} per unit
+                    </p>
                   </div>
                 </div>
-                <button 
+                <button
                   onClick={() => removeFromCart(item.ticket.LotteryID)}
                   className="text-gray-400 hover:text-red-500"
                 >
                   <X size={16} />
                 </button>
               </div>
-              
+
               <div className="flex justify-between items-center mt-2">
                 <div className="flex items-center space-x-2">
-                  <button 
-                    onClick={() => updateQuantity(item.ticket.LotteryID, item.quantity - 1)}
+                  <button
+                    onClick={() =>
+                      updateQuantity(item.ticket.LotteryID, item.quantity - 1)
+                    }
                     className="w-6 h-6 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
                   >
                     <Minus size={12} />
                   </button>
                   <span className="w-8 text-center">{item.quantity}</span>
-                  <button 
-                    onClick={() => updateQuantity(item.ticket.LotteryID, item.quantity + 1)}
+                  <button
+                    onClick={() =>
+                      updateQuantity(item.ticket.LotteryID, item.quantity + 1)
+                    }
                     className="w-6 h-6 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
                   >
                     <Plus size={12} />
@@ -294,7 +330,8 @@ const Cart = () => {
                 </span>
               </div>
               <div className="text-right text-xs text-gray-500 mt-1">
-                Commission: Rs {((item.ticket.UnitCommission || 0) * item.quantity).toFixed(2)}
+                Commission: Rs{" "}
+                {((item.ticket.UnitCommission || 0) * item.quantity).toFixed(2)}
               </div>
             </div>
           ))
@@ -313,19 +350,19 @@ const Cart = () => {
         </div>
 
         {/* Buttons */}
-        <div className="flex gap-2 mt-4 mb-1">
-          <button 
+        <div className="flex gap-4 mt-4 mb-4">
+          <button
             onClick={clearCart}
-            className="flex-1 py-2 px-4 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded transition-colors"
+            className="flex-1 py-2 px-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded transition-colors"
             disabled={cartItems.length === 0 || isSubmitting}
           >
             Clear
           </button>
-          <button 
+          <button
             onClick={handleCheckout}
-            className={`flex-1 py-2 px-4 ${
-              isSubmitting 
-                ? "bg-gray-400 cursor-not-allowed" 
+            className={`flex-1 py-2 px-2 ${
+              isSubmitting
+                ? "bg-gray-400 cursor-not-allowed"
                 : "bg-NavBlue hover:bg-NavBlueDark"
             } text-white rounded transition-colors`}
             disabled={cartItems.length === 0 || isSubmitting}
