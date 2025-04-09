@@ -17,17 +17,20 @@ import {
   RefreshCw, 
   Minus, 
   Plus, 
-  AlertCircle
+  AlertCircle,
+  UserCheck
 } from "lucide-react";
 
-const ORDER_STATUSES = ['Pending', 'Accepted', 'Billed', 'Ready', 'Dispatched'];
+// Modified to include 'Completed' instead of 'Dispatched' for self-pickup orders
+const DELIVERY_STATUSES = ['Pending', 'Accepted', 'Billed', 'Ready', 'Dispatched'];
+const PICKUP_STATUSES = ['Pending', 'Accepted', 'Billed', 'Ready', 'Completed'];
 
 type OrderLotteriesModalProps = {
   order: {
     OrderID: number;
     TotalAmount: number;
     Status: string;
-    StaffID: string | null; // Changed from string to string | null
+    StaffID: string | null;
     Delivery: {
       BusType: string;
       StaffID: string;
@@ -70,6 +73,12 @@ const OrderLotteriesModal = ({ order, isOpen, onClose, onUpdate }: OrderLotterie
     dispatchTime: order.Delivery?.DispatchTime ? new Date(order.Delivery.DispatchTime).toISOString().slice(0, 16) : '',
     arrivalTime: order.Delivery?.ArrivalTime ? new Date(order.Delivery.ArrivalTime).toISOString().slice(0, 16) : ''
   });
+  
+  // Determine if this is a self-pickup order
+  const [isSelfPickup, setIsSelfPickup] = useState(!order.Delivery?.BusType);
+
+  // Get the appropriate status list based on delivery type
+  const ORDER_STATUSES = isSelfPickup ? PICKUP_STATUSES : DELIVERY_STATUSES;
 
   useEffect(() => {
     // Initialize quantities and status from order when modal opens
@@ -77,6 +86,18 @@ const OrderLotteriesModal = ({ order, isOpen, onClose, onUpdate }: OrderLotterie
       setQuantities(order.ContainedLotteries.map(item => item.Quantity));
       calculateTotals(order.ContainedLotteries.map(item => item.Quantity));
       setStatus(order.Status);
+      
+      // Determine if self-pickup based on Delivery data
+      const selfPickup = !order.Delivery?.BusType;
+      setIsSelfPickup(selfPickup);
+      
+      // If status is "Dispatched" and this is now recognized as self-pickup, change to "Completed"
+      let updatedStatus = order.Status;
+      if (selfPickup && updatedStatus === 'Dispatched') {
+        updatedStatus = 'Completed';
+        setStatus('Completed');
+      }
+      
       setDispatchDetails({
         busType: order.Delivery?.BusType || '',
         numberPlate: order.Delivery?.NumberPlate || '',
@@ -111,6 +132,18 @@ const OrderLotteriesModal = ({ order, isOpen, onClose, onUpdate }: OrderLotterie
     setTotalQuantity(newTotalQuantity);
   };
 
+  const toggleSelfPickup = () => {
+    const newIsSelfPickup = !isSelfPickup;
+    setIsSelfPickup(newIsSelfPickup);
+    
+    // Update status if needed
+    if (newIsSelfPickup && status === 'Dispatched') {
+      setStatus('Completed');
+    } else if (!newIsSelfPickup && status === 'Completed') {
+      setStatus('Dispatched');
+    }
+  };
+
   const handleUpdate = async () => {
     try {
       setIsSubmitting(true);
@@ -128,7 +161,7 @@ const OrderLotteriesModal = ({ order, isOpen, onClose, onUpdate }: OrderLotterie
           Quantity: quantities[index]
         }));
       } else {
-        // We're not updating quantities, but still need to pass TotalAmount
+        // pass TotalAmount
         updatedOrderData.TotalAmount = order.TotalAmount;
       }
       
@@ -137,8 +170,8 @@ const OrderLotteriesModal = ({ order, isOpen, onClose, onUpdate }: OrderLotterie
         updatedOrderData.Status = status;
         updatedOrderData.StaffID = staffID;
         
-        // Include delivery details if status is Dispatched
-        if (status === 'Dispatched') {
+        // Include delivery details if status is Dispatched and not self-pickup
+        if (status === 'Dispatched' && !isSelfPickup) {
           updatedOrderData.Delivery = {
             BusType: dispatchDetails.busType,
             NumberPlate: dispatchDetails.numberPlate,
@@ -146,6 +179,9 @@ const OrderLotteriesModal = ({ order, isOpen, onClose, onUpdate }: OrderLotterie
             DispatchTime: dispatchDetails.dispatchTime ? new Date(dispatchDetails.dispatchTime) : null,
             ArrivalTime: dispatchDetails.arrivalTime ? new Date(dispatchDetails.arrivalTime) : null
           };
+        } else if (status === 'Completed' && isSelfPickup) {
+          // Set delivery to null for self-pickup orders marked as completed
+          updatedOrderData.Delivery = null;
         }
       }
       
@@ -186,6 +222,7 @@ const OrderLotteriesModal = ({ order, isOpen, onClose, onUpdate }: OrderLotterie
     setQuantities(order.ContainedLotteries.map(item => item.Quantity));
     setTotalAmount(order.TotalAmount);
     setStatus(order.Status);
+    setIsSelfPickup(!order.Delivery?.BusType);
     setDispatchDetails({
       busType: order.Delivery?.BusType || '',
       numberPlate: order.Delivery?.NumberPlate || '',
@@ -206,7 +243,8 @@ const OrderLotteriesModal = ({ order, isOpen, onClose, onUpdate }: OrderLotterie
     'Accepted': <CheckCircle className="w-5 h-5" />,
     'Billed': <FileText className="w-5 h-5" />,
     'Ready': <Package className="w-5 h-5" />,
-    'Dispatched': <Truck className="w-5 h-5" />
+    'Dispatched': <Truck className="w-5 h-5" />,
+    'Completed': <UserCheck className="w-5 h-5" />
   };
 
   return (
@@ -217,6 +255,11 @@ const OrderLotteriesModal = ({ order, isOpen, onClose, onUpdate }: OrderLotterie
           <div className="flex items-center space-x-2">
             <Clipboard className="w-6 h-6" />
             <h2 className="text-xl font-bold">Order #{order.OrderID}</h2>
+            {isSelfPickup && 
+              <span className="bg-white text-indigo-600 text-xs font-bold px-2 py-1 rounded ml-2">
+                SELF PICKUP
+              </span>
+            }
           </div>
           <button
             onClick={onClose}
@@ -255,6 +298,26 @@ const OrderLotteriesModal = ({ order, isOpen, onClose, onUpdate }: OrderLotterie
               </button>
             )}
           </div>
+          
+          {/* Self-pickup toggle when in status edit mode */}
+          {statusEditMode && (
+            <div className="mb-4 flex items-center">
+              <label className="inline-flex items-center mr-4 cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  checked={isSelfPickup} 
+                  onChange={toggleSelfPickup}
+                  className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+                />
+                <span className="ml-2 text-sm font-medium text-gray-700">Self Pickup</span>
+              </label>
+              <span className="text-xs text-gray-500">
+                {isSelfPickup 
+                  ? "Customer will collect the order themselves" 
+                  : "Order will be dispatched via delivery"}
+              </span>
+            </div>
+          )}
           
           {/* Progress bar with status indicators */}
           <div className="relative mb-6">
@@ -300,8 +363,8 @@ const OrderLotteriesModal = ({ order, isOpen, onClose, onUpdate }: OrderLotterie
             </div>
           </div>
           
-          {/* Dispatch details section */}
-          {statusEditMode && status === 'Dispatched' && (
+          {/* Dispatch details section - only show for delivery orders */}
+          {statusEditMode && status === 'Dispatched' && !isSelfPickup && (
             <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-100 mt-4 animate-fadeIn">
               <h4 className="font-medium text-indigo-800 mb-3 flex items-center">
                 <Truck className="w-4 h-4 mr-2" />
@@ -363,6 +426,19 @@ const OrderLotteriesModal = ({ order, isOpen, onClose, onUpdate }: OrderLotterie
                   />
                 </div>
               </div>
+            </div>
+          )}
+          
+          {/* Self-pickup completion note */}
+          {statusEditMode && status === 'Completed' && isSelfPickup && (
+            <div className="bg-green-50 p-4 rounded-lg border border-green-100 mt-4 animate-fadeIn">
+              <h4 className="font-medium text-green-800 mb-3 flex items-center">
+                <UserCheck className="w-4 h-4 mr-2" />
+                Self-Pickup Completion
+              </h4>
+              <p className="text-sm text-green-700">
+                This order will be marked as completed. The agent will pick up their order directly through distibutor office.
+              </p>
             </div>
           )}
         </div>
