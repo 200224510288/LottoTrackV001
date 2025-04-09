@@ -1,30 +1,15 @@
 import Pagination from "@/components/Pagination";
-import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import prisma from "@/lib/prisma";
-import { Prisma, Order, Delivery, Staff, Agent } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import { auth, currentUser } from "@clerk/nextjs/server";
-import FormModal from "@/components/FormModal";
 import ClientOrderTable from "@/components/ClientOrderTable";
+import { OrderWithRelations } from "@/components/Ordertypes"; // separate file for types
 
 // This remains a server component
-
-type OrderWithRelations = Order & { 
-  Delivery: { BusType: string } | null; 
-  Staff: Staff | null; 
-  Agent: Agent | null;
-  ContainedLotteries: {
-    Quantity: number;
-    Lottery: {
-      LotteryName: string;
-      UnitPrice: number;
-    };
-  }[];
-  totalQuantity: number;
-};
-
 const OrderListPage = async ({ searchParams }: { searchParams: { [key: string]: string | undefined } }) => {
+  
   const user = await currentUser();
   const { sessionClaims } = await auth();
   const role = (sessionClaims?.metadata as { role?: string })?.role;
@@ -80,6 +65,7 @@ const OrderListPage = async ({ searchParams }: { searchParams: { [key: string]: 
     { header: "Order ID", accessor: "OrderID" },
     { header: "Agent Name", accessor: "AgentName"},
     { header: "Total Quantity", accessor: "TotalQuantity",className: "hidden md:table-cell"},
+    { header: "Status", accessor: "Status",className: "hidden md:table-cell"},
     { header: "Total Amount", accessor: "TotalAmount", className: "hidden md:table-cell" },
     { header: "Ordered Time", accessor: "OrderTime", className: "hidden md:table-cell" },
     { header: "Type", accessor: "DeliveryType", className: "hidden md:table-cell" },

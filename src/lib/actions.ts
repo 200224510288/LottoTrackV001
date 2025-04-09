@@ -572,7 +572,16 @@ export const deleteLottery = async (currentState: CurrentState, data: FormData) 
 type UpdateOrderData = {
   OrderID: number;
   TotalAmount: number;
-  ContainedLotteries: {
+  Status?: string;
+  StaffID?: string;
+  Delivery?: {
+    BusType: string;
+    NumberPlate: string;
+    StaffID: string;
+    DispatchTime: Date | null;
+    ArrivalTime: Date | null;
+  };
+  ContainedLotteries?: {
     Quantity: number;
     Lottery: {
       LotteryID: number;
@@ -586,32 +595,114 @@ export const updateOrder = async (orderData: UpdateOrderData) => {
   try {
     // Start a transaction to ensure all updates happen together
     const result = await prisma.$transaction(async (tx) => {
-      // Step 1: Update the main order with the new total amount
+      // Prepare order update data
+      const orderUpdateData: any = {};
+      
+      // Add total amount if provided
+      if (orderData.TotalAmount !== undefined) {
+        orderUpdateData.TotalAmount = orderData.TotalAmount;
+      }
+      
+      // Add status if provided
+      if (orderData.Status) {
+        orderUpdateData.Status = orderData.Status;
+      }
+      
+      // Add staff ID if provided
+      if (orderData.StaffID) {
+        orderUpdateData.StaffID = orderData.StaffID;
+      }
+      
+      // Step 1: Update the main order
       const updatedOrder = await tx.order.update({
         where: {
           OrderID: orderData.OrderID
         },
-        data: {
-          TotalAmount: orderData.TotalAmount
+        data: orderUpdateData,
+        include: {
+          Agent: true,
+          Staff: true,
+          Delivery: true,
+          ContainedLotteries: {
+            include: {
+              Lottery: true
+            }
+          }
         }
       });
 
-      // Step 2: Update each lottery quantity in the order
-      for (const item of orderData.ContainedLotteries) {
-        await tx.order_Contain_Lottery.update({
-          where: {
-            LotteryID_OrderID: {
-              OrderID: orderData.OrderID,
-              LotteryID: item.Lottery.LotteryID
+      // Step 2: Update lottery quantities if provided
+      if (orderData.ContainedLotteries && orderData.ContainedLotteries.length > 0) {
+        for (const item of orderData.ContainedLotteries) {
+          await tx.order_Contain_Lottery.update({
+            where: {
+              LotteryID_OrderID: {
+                OrderID: orderData.OrderID,
+                LotteryID: item.Lottery.LotteryID
+              }
+            },
+            data: {
+              Quantity: item.Quantity
             }
-          },
-          data: {
-            Quantity: item.Quantity
-          }
-        });
+          });
+        }
       }
-
-      return updatedOrder;
+      
+      // Step 3: Handle delivery information for dispatched orders
+      if (orderData.Status === 'Dispatched' && orderData.Delivery) {
+        // Check if delivery record already exists
+        const existingDelivery = await tx.delivery.findFirst({
+          where: { OrderID: orderData.OrderID }
+        });
+        
+        if (existingDelivery) {
+          // Update existing delivery record
+          await tx.delivery.update({
+            where: { DeliveryID: existingDelivery.DeliveryID },
+            data: {
+              BusType: orderData.Delivery.BusType,
+              NumberPlate: orderData.Delivery.NumberPlate,
+              StaffID: orderData.Delivery.StaffID,
+              DispatchTime: orderData.Delivery.DispatchTime ?? new Date(),
+              ArrivalTime: orderData.Delivery.ArrivalTime
+            }
+          });
+        } else {
+          // Create new delivery record
+          await tx.delivery.create({
+            data: {
+              OrderID: orderData.OrderID,
+              BusType: orderData.Delivery.BusType,
+              NumberPlate: orderData.Delivery.NumberPlate,
+              StaffID: orderData.Delivery.StaffID,
+              DispatchTime: orderData.Delivery.DispatchTime ?? new Date(),
+              ArrivalTime: orderData.Delivery.ArrivalTime
+            }
+          });
+        }
+      }
+      
+      // Fetch the updated order with all its relations
+      const completeOrder = await tx.order.findUnique({
+        where: { OrderID: orderData.OrderID },
+        include: {
+          Agent: true,
+          Staff: true,
+          Delivery: true,
+          ContainedLotteries: {
+            include: {
+              Lottery: true
+            }
+          }
+        }
+      });
+      
+      // Calculate total quantity
+      const totalQuantity = completeOrder?.ContainedLotteries.reduce(
+        (sum, item) => sum + item.Quantity, 0
+      ) || 0;
+      
+      return { ...completeOrder, totalQuantity };
     });
 
     // Revalidate the orders page to show updated data
@@ -620,7 +711,7 @@ export const updateOrder = async (orderData: UpdateOrderData) => {
     return {
       success: true,
       error: false,
-      order: result,
+      data: result,
       message: "Order updated successfully"
     };
   } catch (err: any) {

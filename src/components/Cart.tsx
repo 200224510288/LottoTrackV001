@@ -224,7 +224,6 @@ const Cart = () => {
           <span className="text-gray-700">Dispatch</span>
         </label>
       </div>
-
       {/* Bus Stop Selection */}
       <div className="w-full px-4 mb-6 flex items-center space-x-2 shadow-md relative">
         <Image src="/BusLogo.png" alt="Bus Logo" width={40} height={30} />
@@ -240,8 +239,8 @@ const Cart = () => {
             }`}
             disabled={deliveryOption === "selfPick"}
           >
-            <option value="centralStation">CTB</option>
-            <option value="mainStreet">Private</option>
+            <option value="CTB">CTB</option>
+            <option value="Private">Private</option>
           </select>
           {/* Custom dropdown arrow */}
           <svg

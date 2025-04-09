@@ -10,6 +10,7 @@ type LotteryWithStock = Prisma.LotteryGetPayload<{
   };
 }>;
 
+
 // Define cart item type
 export type CartItem = {
   ticket: LotteryWithStock;

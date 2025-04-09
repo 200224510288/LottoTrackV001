@@ -5,33 +5,10 @@ import Table from "@/components/Table";
 import FormModal from "@/components/FormModal";
 import OrderLotteriesModal from "@/components/OrderLotteriesModal";
 import Image from 'next/image';
+import { useUser } from "@clerk/nextjs";
+import { OrderWithRelations } from "@/components/Ordertypes"; // separate file for types
 
-type OrderWithRelations = {
-  OrderID: number;
-  TotalAmount: number;
-  OrderTime: Date;
-  Agent: {
-    FirstName: string;
-    LastName: string;
-    City: string;
-  } | null;
-  Staff: {
-    FirstName: string;
-    LastName: string;
-  } | null;
-  Delivery: {
-    BusType: string;
-  } | null;
-  ContainedLotteries: {
-    Quantity: number;
-    Lottery: {
-      LotteryID: number;
-      LotteryName: string;
-      UnitPrice: number;
-    };
-  }[];
-  totalQuantity: number;
-};
+
 
 interface ClientOrderTableProps {
   orders: OrderWithRelations[];
@@ -40,6 +17,7 @@ interface ClientOrderTableProps {
 }
 
 const ClientOrderTable = ({ orders: initialOrders, columns, role }: ClientOrderTableProps) => {
+  const { user } = useUser();
   const [orders, setOrders] = useState<OrderWithRelations[]>(initialOrders);
   const [selectedOrder, setSelectedOrder] = useState<OrderWithRelations | null>(null);
   const [isLotteriesModalOpen, setIsLotteriesModalOpen] = useState(false);
@@ -69,11 +47,33 @@ const ClientOrderTable = ({ orders: initialOrders, columns, role }: ClientOrderT
     );
   };
 
+  const getStatusBadgeColor = (status: string) => {
+    switch(status) {
+      case 'Pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'Accepted':
+        return 'bg-blue-100 text-blue-800';
+      case 'Billed':
+        return 'bg-purple-100 text-purple-800';
+      case 'Ready':
+        return 'bg-green-100 text-green-800';
+      case 'Dispatched':
+        return 'bg-gray-100 text-gray-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
   const renderRow = (item: OrderWithRelations) => (
     <tr key={item.OrderID} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-PurpleLight">
       <td className="p-4 font-semibold">{item.OrderID || "N/A"}</td>
       <td>{item.Agent?.FirstName} {item.Agent?.LastName || "N/A"}</td>
       <td className="font-medium hidden md:table-cell">{item.totalQuantity}</td>
+      <td className="font-medium hidden md:table-cell">
+        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusBadgeColor(item.Status)}`}>
+          {item.Status}
+        </span>
+      </td>
       <td className="font-medium hidden md:table-cell">Rs {item.TotalAmount.toFixed(2)}</td>
       <td className="hidden md:table-cell">
         {item.OrderTime ? new Date(item.OrderTime).toLocaleString() : "N/A"}
@@ -109,8 +109,10 @@ const ClientOrderTable = ({ orders: initialOrders, columns, role }: ClientOrderT
           order={selectedOrder}
           isOpen={isLotteriesModalOpen}
           onClose={handleCloseModal}
+          onUpdate={handleOrderUpdate}
         />
       )}
+      
     </>
   );
 };
