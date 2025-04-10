@@ -46,7 +46,7 @@ const OrderListPage = async ({ searchParams }: { searchParams: { [key: string]: 
         take: ITEM_PER_PAGE,
         skip: ITEM_PER_PAGE * (p - 1),
         orderBy: {
-          OrderTime: 'desc',
+          OrderTime: 'asc',
         },
       }),
       prisma.order.count({ where: query }),

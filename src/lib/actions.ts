@@ -8,6 +8,7 @@ import { error } from "console";
 import { boolean } from "zod";
 import { z } from "zod";
 import { CartItem } from "@/components/CartContext"; 
+import { auth } from '@clerk/nextjs/server';
 
 type DeliveryInfo = {
   deliveryOption: "selfPick" | "dispatch";
@@ -61,10 +62,11 @@ export const createOrder = async (
         await tx.delivery.create({
           data: {
             OrderID: newOrder.OrderID,
-            StaffID: "user_2u9IzPhBE1W70P7QuUSpQN0o6AL", // staff ID as admin
-            NumberPlate: "TBD",      
+            StaffID: "user_2u9IzPhBE1W70P7QuUSpQN0o6AL",
+            NumberPlate: "Will Confirm Soon ...", 
             BusType: deliveryInfo.busStop,
-            DispatchTime: new Date(Date.now() + 24 * 60 * 60 * 1000), 
+            DispatchTime: new Date(Date.now() + 24 * 60 * 60 * 1000),
+            ArrivalTime: new Date(Date.now() + 48 * 60 * 60 * 1000), 
           },
         });
       }
@@ -87,6 +89,167 @@ export const createOrder = async (
     };
   }
 };
+
+
+export type Order = {
+  OrderID: number;
+  TotalAmount: number;
+  Status: string;
+  StaffID: string | null;
+  CreatedAt: string;
+  UpdatedAt: string;
+  Delivery: {
+    BusType: string;
+    StaffID: string;
+    NumberPlate: string;
+    ArrivalTime: Date;
+    DispatchTime: Date;
+  } | null;
+  ContainedLotteries: {
+    Quantity: number;
+    Lottery: {
+      LotteryID: number;
+      LotteryName: string;
+      UnitPrice: number;
+    };
+  }[];
+  Customer: {
+    CustomerID: number;
+    FullName: string;
+    Email: string;
+    Phone: string;
+  };
+  totalQuantity: number;
+};
+
+export async function fetchAgentOrders() {
+  try {
+    // Get the current agent ID from auth
+    const { userId } = await auth();
+    
+    if (!userId) {
+      return {
+        success: false,
+        error: true,
+        message: "Authentication required",
+        orders: []
+      };
+    }
+    
+    // Log to debug
+    console.log("Fetching orders for user:", userId);
+    
+    // Fetch orders with safer approach
+    const rawOrders = await prisma.order.findMany({
+      where: {
+        AgentID: userId
+      },
+      orderBy: {
+        OrderID: 'desc'
+      }
+    });
+    
+    // Log intermediate result
+    console.log(`Found ${rawOrders.length} raw orders`);
+    
+    // Process each order individually to avoid map issues
+    const transformedOrders: Order[] = [];
+    
+    for (const order of rawOrders) {
+      try {
+        // Fetch related data separately to avoid complex join issues
+        const containedLotteries = await prisma.order_Contain_Lottery.findMany({
+          where: { 
+            OrderID: order.OrderID 
+          },
+          include: {
+            Lottery: true
+          }
+        });
+        
+        const delivery = await prisma.delivery.findUnique({
+          where: { 
+            OrderID: order.OrderID 
+          }
+        });
+        
+        const agent = await prisma.agent.findUnique({
+          where: { 
+            AgentID: order.AgentID 
+          }
+        });
+        
+        // Safely construct the transformed order
+        const transformedOrder: Order = {
+          OrderID: order.OrderID,
+          TotalAmount: order.TotalAmount,
+          Status: order.Status,
+          StaffID: order.StaffID,
+          CreatedAt: order.OrderDate.toISOString(),
+          UpdatedAt: order.OrderDate.toISOString(), // Using OrderDate for UpdatedAt
+          
+          // Safely handle Delivery
+          Delivery: delivery ? {
+            BusType: delivery.BusType || "Unknown", // Provide a default value for BusType
+            StaffID: delivery.StaffID,
+            NumberPlate: delivery.NumberPlate,
+            ArrivalTime: delivery.ArrivalTime || new Date(),
+            DispatchTime: delivery.DispatchTime || new Date()
+          } : null,
+          
+          // Safely handle ContainedLotteries
+          ContainedLotteries: containedLotteries.map(item => ({
+            Quantity: item.Quantity,
+            Lottery: {
+              LotteryID: item.Lottery.LotteryID,
+              LotteryName: item.Lottery.LotteryName,
+              UnitPrice: item.Lottery.UnitPrice
+            }
+          })),
+          
+          // Safely handle Customer
+          Customer: agent ? {
+            CustomerID: parseInt(agent.AgentID),
+            FullName: agent.FirstName || "Unknown Customer",
+            Email: agent.City || "",
+            Phone: agent.HomeAddress || ""
+          } : {
+            CustomerID: 0,
+            FullName: "Unknown Customer",
+            Email: "",
+            Phone: ""
+          },
+          
+          // Calculate totalQuantity
+          totalQuantity: containedLotteries.reduce(
+            (sum, item) => sum + item.Quantity, 0
+          )
+        };
+        
+        transformedOrders.push(transformedOrder);
+      } catch (orderErr) {
+        console.error(`Error processing order ${order.OrderID}:`, orderErr);
+        // Continue with other orders instead of failing completely
+      }
+    }
+
+    return {
+      success: true,
+      error: false,
+      orders: transformedOrders
+    };
+    
+  } catch (err: any) {
+    console.error("Fetch Agent Orders Error:", err);
+    return {
+      success: false,
+      error: true,
+      message: err.message || "Failed to fetch orders",
+      orders: []
+    };
+  }
+}
+
 
 
 export const deleteOrder = async (orderID: string) => {
