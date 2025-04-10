@@ -229,13 +229,13 @@ export default function MyOrder() {
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.3 }}
       key={order.OrderID} 
-      className="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-all border border-gray-100 cursor-pointer transform hover:-translate-y-1"
+      className="bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-all border border-gray-300 cursor-pointer transform hover:-translate-y-1"
       onClick={() => handleOrderClick(order)}
     >
       <div className="flex justify-between items-start mb-3">
         <div className="flex items-center">
           <div className="bg-indigo-100 p-2 rounded-lg mr-3">
-            <Package className="w-5 h-5 text-indigo-600" />
+            <Package className="w-5 h-5 text-NavBlue" />
           </div>
           <div>
             <h3 className="font-semibold text-lg text-gray-800">Order #{order.OrderID}</h3>
@@ -254,24 +254,24 @@ export default function MyOrder() {
         </div>
       </div>
       
-      <div className="pl-11">
+      <div className="pl-11 ">
         <div className="grid grid-cols-2 gap-2 text-sm mb-3">
           <div className="flex items-center text-gray-500">
             <Tag className="w-3 h-3 mr-1" />
             <span>{order.totalQuantity} items</span>
           </div>
           
-          <div className="flex items-center justify-end text-indigo-600 font-medium">
+          <div className="flex items-center justify-end text-NavBlue font-medium">
             {formatCurrency(order.TotalAmount)}
           </div>
         </div>
 
-        <div className="flex items-center text-sm text-gray-600">
+        {/* <div className="flex items-center text-sm text-gray-600">
           <div className="w-6 h-6 bg-gray-100 rounded-full mr-2 flex items-center justify-center overflow-hidden">
             {order.Customer.FullName.charAt(0).toUpperCase()}
           </div>
           <span className="truncate">{order.Customer.FullName}</span>
-        </div>
+        </div> */}
 
         {/* Show delivery info if available */}
         {order.Delivery && (
@@ -314,11 +314,13 @@ export default function MyOrder() {
   return (
     <>
       {/* Main content area with adjusted padding and positioning for Navbar and Cart */}
-      <div className="bg-gray-50 min-h-screen">
+      <div className="bg-gray-50 min-h-screen"
+       style={{ backgroundImage: "url('/bg.png')" }}
+      >
         <div className="container mx-auto px-4 pt-20 pb-8 ml-0 md:ml-0 lg:ml-0 lg:w-3/4">
           {/* Header */}
           <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center mb-6">
-            <h1 className="font-bold text-3xl text-gray-800 mb-4 md:mb-0">My Orders</h1>
+            <h1 className="font-bold text-3xl text-gray-800 mb-4 ml-10 mt-4 md:mb-0">My Orders</h1>
             
             <div className="flex items-center w-full md:w-auto">
               {/* Search bar */}
@@ -331,7 +333,7 @@ export default function MyOrder() {
                   placeholder="Search orders..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                  className="block w-full pl-10 pr-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-NavBlue focus:border-NavBlue text-sm"
                 />
               </div>
               
@@ -352,7 +354,7 @@ export default function MyOrder() {
               onClick={() => setActiveTab('active')}
               className={`flex-1 flex items-center justify-center py-2 text-sm font-medium rounded-md ${
                 activeTab === 'active' 
-                  ? 'bg-white text-indigo-600 shadow-sm' 
+                  ? 'bg-white text-NavBlue shadow-sm' 
                   : 'text-gray-600'
               }`}
             >
@@ -363,7 +365,7 @@ export default function MyOrder() {
               onClick={() => setActiveTab('completed')}
               className={`flex-1 flex items-center justify-center py-2 text-sm font-medium rounded-md ${
                 activeTab === 'completed' 
-                  ? 'bg-white text-indigo-600 shadow-sm' 
+                  ? 'bg-white text-NavBlue shadow-sm' 
                   : 'text-gray-600'
               }`}
             >
@@ -375,7 +377,7 @@ export default function MyOrder() {
           {/* Loading state */}
           {isLoading && (
             <div className="bg-white p-8 rounded-lg shadow-md flex items-center justify-center">
-              <RefreshCw className="w-6 h-6 text-indigo-500 animate-spin mr-3" />
+              <RefreshCw className="w-6 h-6 text-NavBlue animate-spin mr-3" />
               <p>Loading your orders...</p>
             </div>
           )}
@@ -393,9 +395,9 @@ export default function MyOrder() {
             {!isLoading && !error && activeTab === 'active' && (
               <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-200">
                 <h2 className="text-lg font-semibold mb-4 text-gray-800 flex items-center">
-                  <Clock className="w-5 h-5 mr-2 text-indigo-600" />
+                  <Clock className="w-5 h-5 mr-2 text-NavBlue" />
                   Active Orders
-                  <span className="ml-2 bg-indigo-100 text-indigo-800 text-xs px-2 py-0.5 rounded-full">
+                  <span className="ml-2 bg-indigo-100 text-NavBlue text-xs px-2 py-0.5 rounded-full">
                     {filteredActiveOrders.length}
                   </span>
                 </h2>
@@ -432,19 +434,19 @@ export default function MyOrder() {
           </div>
 
           {/* Desktop View - Show both tabs side by side */}
-          <div className="hidden md:grid md:grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="hidden md:grid md:grid-cols-1 lg:grid-cols-2 gap-8 mx-5">
             {!isLoading && !error && (
               <>
                 {/* Active Orders */}
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                <div className="bg-white p-6 rounded-xl shadow-xl border border-gray-200">
                   <h2 className="text-xl font-semibold mb-5 text-gray-800 flex items-center">
-                    <Clock className="w-5 h-5 mr-2 text-indigo-600" />
-                    Active Orders
-                    <span className="ml-2 bg-indigo-100 text-indigo-800 text-xs px-2 py-0.5 rounded-full">
+                    <Clock className="w-5 h-5 mr-2 text-NavBlue" />
+                    Active Orders 
+                    <span className="ml-2 bg-indigo-100 text-NavBlue text-xs px-2 py-0.5 rounded-full">
                       {filteredActiveOrders.length}
                     </span>
                   </h2>
-                  <div className="space-y-3 max-h-[calc(100vh-16rem)] overflow-y-auto">
+                  <div className="space-y-3 max-h-[calc(100vh-18rem)] overflow-y-auto">
                     <AnimatePresence>
                       {filteredActiveOrders.length > 0 ? 
                         filteredActiveOrders.map(order => renderOrderCard(order)) :
@@ -457,13 +459,13 @@ export default function MyOrder() {
                 {/* Completed Orders */}
                 <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
                   <h2 className="text-xl font-semibold mb-5 text-gray-800 flex items-center">
-                    <CheckCircle className="w-5 h-5 mr-2 text-green-600" />
+                    <CheckCircle className="w-5 h-5 mr-2 text-green-800" />
                     Completed Orders
                     <span className="ml-2 bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full">
                       {filteredCompletedOrders.length}
                     </span>
                   </h2>
-                  <div className="space-y-3 max-h-[calc(100vh-16rem)] overflow-y-auto">
+                  <div className="space-y-3 max-h-[calc(100vh-18rem)] overflow-y-auto">
                     <AnimatePresence>
                       {filteredCompletedOrders.length > 0 ? 
                         filteredCompletedOrders.map(order => renderOrderCard(order)) :

@@ -248,22 +248,22 @@ const OrderLotteriesModal = ({ order, isOpen, onClose, onUpdate }: OrderLotterie
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 backdrop-blur-sm">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-auto border border-gray-200">
+    <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 backdrop-blur-sm ">
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-3xl max-h-[90vh]  flex flex-col ">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 flex justify-between items-center">
+        <div className="bg-NavBlue text-white p-5 flex justify-between items-center ">
           <div className="flex items-center space-x-2">
             <Clipboard className="w-6 h-6" />
-            <h2 className="text-xl font-bold">Order #{order.OrderID}</h2>
+            <h2 className="text-xl font-bold ">Order #{order.OrderID}</h2>
             {isSelfPickup && 
-              <span className="bg-white text-indigo-600 text-xs font-bold px-2 py-1 rounded ml-2">
+              <span className="bg-white text-NavBlue text-xs font-bold px-1 py-1 rounded ">
                 SELF PICKUP
               </span>
             }
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-full hover:bg-white hover:bg-opacity-20 transition-colors"
+            className=" rounded-full hover:bg-white hover:bg-opacity-20 transition-colors"
             aria-label="Close modal"
           >
             <X className="w-6 h-6" />
@@ -285,15 +285,15 @@ const OrderLotteriesModal = ({ order, isOpen, onClose, onUpdate }: OrderLotterie
         )}
         
         {/* Order Status Progress Section */}
-        <div className="p-6 border-b border-gray-200">
+        <div className="pt-5 px-6 border-b border-gray-200">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-medium text-gray-800">Order Progress</h3>
             {!statusEditMode && !editMode && (
               <button
                 onClick={() => setStatusEditMode(true)}
-                className="flex items-center bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-1.5 px-3 rounded-md transition-colors text-sm"
+                className="flex items-center bg-NavBlue hover:bg-indigo-700 text-white py-1.5 px-3 rounded-md transition-colors text-sm"
               >
-                <RefreshCw className="w-4 h-4 mr-1" />
+                <RefreshCw className="w-3 h-3 mr-2 " />
                 Update Status
               </button>
             )}
@@ -444,21 +444,21 @@ const OrderLotteriesModal = ({ order, isOpen, onClose, onUpdate }: OrderLotterie
         </div>
         
         {/* Lotteries Section */}
-        <div className="p-6 overflow-y-auto max-h-[calc(90vh-24rem)]">
+        <div className="px-6 py-3 overflow-y-auto max-h-[calc(90vh-24rem)]">
           <div className="flex justify-between items-center mb-3">
             <h3 className="font-medium text-gray-800 flex items-center">
-              <Package className="w-5 h-5 mr-2 text-indigo-600" />
+              <Package className="w-5 h-5 mr-2 text-NavBlue" />
               Order Items
             </h3>
-            {!editMode && !statusEditMode && (
+            {/* {!editMode && !statusEditMode && (
               <button
                 onClick={() => setEditMode(true)}
-                className="flex items-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-1.5 px-3 rounded-md transition-colors text-sm"
+                className="flex items-center bg-NavBlue hover:bg-blue-700 text-white py-1.5 px-3 rounded-md transition-colors text-sm"
               >
-                <Edit className="w-4 h-4 mr-1" />
+                <Edit className="w-3 h-3 mr-2" />
                 Edit Quantities
               </button>
-            )}
+            )} */}
           </div>
           
           {order.ContainedLotteries.length > 0 ? (
@@ -466,16 +466,16 @@ const OrderLotteriesModal = ({ order, isOpen, onClose, onUpdate }: OrderLotterie
               <table className="min-w-full divide-y divide-gray-200">
                 <thead>
                   <tr className="bg-gray-50">
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                       Lottery Name
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                       Unit Price
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                       Quantity
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                       Subtotal
                     </th>
                   </tr>
@@ -490,10 +490,10 @@ const OrderLotteriesModal = ({ order, isOpen, onClose, onUpdate }: OrderLotterie
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                           {item.Lottery.LotteryName}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                           Rs {item.Lottery.UnitPrice.toFixed(2)}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                           {editMode ? (
                             <div className="flex items-center bg-gray-100 rounded-md overflow-hidden w-32">
                               <button 
@@ -536,15 +536,15 @@ const OrderLotteriesModal = ({ order, isOpen, onClose, onUpdate }: OrderLotterie
                 </tbody>
                 <tfoot>
                   <tr className="bg-indigo-50">
-                    <td colSpan={2} className="px-6 py-4 whitespace-nowrap text-sm font-bold text-indigo-900">
+                    <td colSpan={2} className="px-6 py-4 whitespace-nowrap text-sm font-bold text-NavBlue">
                       Total
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-indigo-900">
-                      <span className="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-NavBlue">
+                      <span className="px-3 py-1 bg-indigo-100 text-NavBlue rounded-full">
                         {totalQuantity}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-indigo-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-NavBlue">
                       Rs {totalAmount.toFixed(2)}
                     </td>
                   </tr>
@@ -578,17 +578,17 @@ const OrderLotteriesModal = ({ order, isOpen, onClose, onUpdate }: OrderLotterie
                 </button>
                 <button
                   onClick={handleUpdate}
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors flex items-center shadow-md"
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-sm py-2 px-4 rounded-md transition-colors flex items-center shadow-md"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (
                     <>
-                      <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                      <RefreshCw className="w-3 h-4 mr-3 animate-spin" />
                       Saving...
                     </>
                   ) : (
                     <>
-                      <Save className="w-4 h-4 mr-2" />
+                      <Save className="w-3 h-3 mr-2" />
                       Save Changes
                     </>
                   )}
@@ -596,25 +596,25 @@ const OrderLotteriesModal = ({ order, isOpen, onClose, onUpdate }: OrderLotterie
               </>
             ) : (
               <>
-                <button
+                {/* <button
                   onClick={onClose}
-                  className="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-md transition-colors"
+                  className="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 py-2 px-4 rounded-md text-sm transition-colors"
                 >
-                  Close
-                </button>
+                  Close 
+                </button> */}
                 <div className="space-x-2">
-                  <button
+                  {/* <button
                     onClick={() => setStatusEditMode(true)}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors inline-flex items-center"
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm py-2 px-4 rounded-md transition-colors inline-flex items-center"
                   >
-                    <RefreshCw className="w-4 h-4 mr-2" />
+                    <RefreshCw className="w-3 h-3 mr-2" />
                     Update Status
-                  </button>
+                  </button> */}
                   <button
                     onClick={() => setEditMode(true)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors inline-flex items-center"
+                    className="bg-NavBlue hover:bg-blue-700 text-white text-sm py-2 px-4 rounded-md transition-colors inline-flex items-center"
                   >
-                    <Edit className="w-4 h-4 mr-2" />
+                    <Edit className="w-3 h-3 mr-2" />
                     Edit Quantities
                   </button>
                 </div>
