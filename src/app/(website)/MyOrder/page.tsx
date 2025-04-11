@@ -43,6 +43,7 @@ interface Order {
       LotteryID: number;
       LotteryName: string;
       UnitPrice: number;
+      DrawDate: Date;
     };
   }[];
   Customer: {
