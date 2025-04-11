@@ -20,6 +20,7 @@ import { formatCurrency } from "@/lib/utils";
 import OrderLotteriesModal from "@/components/OrderLotteriesModal";
 import { fetchAgentOrders } from "@/lib/actions";
 import { motion, AnimatePresence } from "framer-motion";
+import AgentOrderDetailsModal from "@/components/OrderLotteriesModalAgent";
 
 // Define the Order type to match  backend data structure
 interface Order {
@@ -482,11 +483,10 @@ export default function MyOrder() {
 
       {/* Order Details Modal */}
       {selectedOrder && (
-        <OrderLotteriesModal
+        <AgentOrderDetailsModal
           order={selectedOrder}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          onUpdate={handleOrderUpdate}
         />
       )}
     </>

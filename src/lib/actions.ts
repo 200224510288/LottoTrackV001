@@ -111,6 +111,7 @@ export type Order = {
       LotteryID: number;
       LotteryName: string;
       UnitPrice: number;
+      DrawDate: Date;
     };
   }[];
   Customer: {
@@ -203,7 +204,8 @@ export async function fetchAgentOrders() {
             Lottery: {
               LotteryID: item.Lottery.LotteryID,
               LotteryName: item.Lottery.LotteryName,
-              UnitPrice: item.Lottery.UnitPrice
+              UnitPrice: item.Lottery.UnitPrice,
+              DrawDate: item.Lottery.DrawDate || new Date(),
             }
           })),
           
