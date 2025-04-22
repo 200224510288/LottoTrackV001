@@ -5,7 +5,7 @@ import { Prisma } from "@prisma/client";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import ClientOrderTable from "@/components/ClientOrderTable";
-import { OrderWithRelations } from "@/components/Ordertypes"; // separate file for types
+import { OrderWithRelations } from "@/components/Ordertypes"; // Imporing order details by relations
 
 // This remains a server component
 const OrderListPage = async ({ searchParams }: { searchParams: { [key: string]: string | undefined } }) => {
@@ -19,6 +19,7 @@ const OrderListPage = async ({ searchParams }: { searchParams: { [key: string]: 
 
   const query: Prisma.OrderWhereInput = {};
 
+  // Fuction for search orders by order id
   if (queryParams.search) {
     query.OR = [
       { AgentID: { contains: queryParams.search, mode: "insensitive" } },
@@ -45,6 +46,7 @@ const OrderListPage = async ({ searchParams }: { searchParams: { [key: string]: 
         },
         take: ITEM_PER_PAGE,
         skip: ITEM_PER_PAGE * (p - 1),
+        //get the order according to asending view
         orderBy: {
           OrderTime: 'asc',
         },
@@ -60,7 +62,7 @@ const OrderListPage = async ({ searchParams }: { searchParams: { [key: string]: 
     const totalQuantity = order.ContainedLotteries.reduce((sum: any, item: { Quantity: any; }) => sum + item.Quantity, 0);
     return { ...order, totalQuantity };
   });
-
+// Creating table columns
   const columns = [
     { header: "Order ID", accessor: "OrderID" },
     { header: "Agent Name", accessor: "AgentName"},
@@ -81,10 +83,13 @@ const OrderListPage = async ({ searchParams }: { searchParams: { [key: string]: 
       <div className="flex items-center justify-between">
         <h1 className="hidden md:block text-lg font-semibold">All Orders</h1>
         <div className="flex items-center gap-4">
+           {/* // importing search bar components. */}
           <TableSearch />
         </div>
       </div>
+      {/* Importing the order list  */}
       <ClientOrderTable orders={data} columns={columns} role={role || ""} />
+      {/* Adding pagination fuctionality */}
       <Pagination page={p} count={count} />
     </div>
   );
