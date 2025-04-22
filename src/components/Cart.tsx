@@ -141,7 +141,7 @@ const Cart = () => {
                 <div className="flex justify-between">
                   <span>Bus Stop:</span>
                   <span>
-                    {busStop === "centralStation" ? "CTB" : "Private"}
+                    {busStop === "CTB" ? "CTB" : "Private"}
                   </span>
                 </div>
               )}
