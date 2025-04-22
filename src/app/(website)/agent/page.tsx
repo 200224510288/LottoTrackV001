@@ -121,17 +121,18 @@ export default function AgentLotteryView() {
       <Head>
         <title>Agent Lottery View</title>
         <meta name="description" content="Agent view of lottery tickets" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <div
-        className="min-h-screen  bg-fixed bg-cover bg-center "
+        className="min-h-screen bg-fixed bg-cover bg-center"
         style={{ backgroundImage: "url('/bg.png')" }}
       >
-        <div className="left-0  p-10 w-3/4 overflow-y-auto max-h-screen">
-          <div className="flex flex-col sm:flex-row gap-4 items-center ml-10 mt-20">
+        <div className="left-0 p-5 sm:p-10 w-full sm:w-3/4 overflow-y-auto max-h-screen">
+          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center ml-0 sm:ml-10 mt-10 sm:mt-20">
             <label className="text-lg font-bold text-gray-700">
               Search Date:
             </label>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
               <input
                 type="date"
                 className="p-2 border border-gray-300 rounded focus:ring-2 focus:ring-NavBlue focus:border-transparent"
@@ -148,17 +149,17 @@ export default function AgentLotteryView() {
             </div>
           </div>
 
-          <h1 className="font-bold text-3xl mt-10 mb-6 ml-10 text-gray-600">
+          <h1 className="font-bold text-3xl mt-8 sm:mt-10 mb-6 ml-0 sm:ml-10 text-gray-600">
             NLB TICKETS
           </h1>
 
           <div className="overflow-x-auto">
             {nlbTickets.length > 0 ? (
-              <div className="tickets grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16 ml-10 mb-20">
+              <div className="tickets grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-16 ml-0 sm:ml-10 mb-16 sm:mb-20">
                 {nlbTickets.map((ticket) => (
                   <div
                     key={ticket.LotteryID}
-                    className={`w-full max-w-sm bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-2xl `}
+                    className="w-full max-w-sm bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-2xl"
                   >
                     <div className="relative aspect-[1/] w-full overflow-hidden">
                       <Image
@@ -170,14 +171,12 @@ export default function AgentLotteryView() {
                         priority
                       />
                     </div>
-                    <div className="p-4 ">
+                    <div className="p-4">
                       <div className="flex justify-between items-center">
                         <h3 className="font-semibold text-lg truncate">
                           {ticket.LotteryName}
                         </h3>
-                        <span
-                          className={`px-2 py-1 rounded-full text-xs font-medium `}
-                        >
+                        <span className="px-2 py-1 rounded-full text-xs font-medium">
                           {getAvailabilityStatus(ticket)}
                         </span>
                       </div>
@@ -240,23 +239,23 @@ export default function AgentLotteryView() {
                 ))}
               </div>
             ) : (
-              <div className="ml-10 p-4 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700">
+              <div className="ml-0 sm:ml-10 p-4 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700">
                 <p>No NLB tickets available for selected date</p>
               </div>
             )}
           </div>
 
-          <h1 className="font-bold text-3xl mt-10 mb-6 ml-10 text-gray-600">
+          <h1 className="font-bold text-3xl mt-8 sm:mt-10 mb-6 ml-0 sm:ml-10 text-gray-600">
             DLB TICKETS
           </h1>
 
           <div className="overflow-x-auto">
             {dlbTickets.length > 0 ? (
-              <div className="tickets grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-16 ml-10 mb-20">
+              <div className="tickets grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-16 ml-0 sm:ml-10 mb-16 sm:mb-20">
                 {dlbTickets.map((ticket) => (
                   <div
                     key={ticket.LotteryID}
-                    className={`w-full max-w-sm bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg border-2`}
+                    className="w-full max-w-sm bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg border-2"
                   >
                     <div className="relative aspect-[1/] w-full overflow-hidden">
                       <Image
@@ -268,14 +267,12 @@ export default function AgentLotteryView() {
                         priority
                       />
                     </div>
-                    <div className="p-4 ">
+                    <div className="p-4">
                       <div className="flex justify-between items-center">
                         <h3 className="font-semibold text-lg truncate">
                           {ticket.LotteryName}
                         </h3>
-                        <span
-                          className={`px-2 py-1 rounded-full text-xs font-medium`}
-                        >
+                        <span className="px-2 py-1 rounded-full text-xs font-medium">
                           {getAvailabilityStatus(ticket)}
                         </span>
                       </div>
@@ -283,7 +280,7 @@ export default function AgentLotteryView() {
                         <p className="text-gray-600 text-sm">
                           commission: {ticket.UnitCommission?.toFixed(2)}
                         </p>
-                        <p className="text-NavBlue font-semibold text-sm ">
+                        <p className="text-NavBlue font-semibold text-sm">
                           Unit Price: Rs {ticket.UnitPrice?.toFixed(2)}
                         </p>
                       </div>
@@ -338,7 +335,7 @@ export default function AgentLotteryView() {
                 ))}
               </div>
             ) : (
-              <div className="ml-10 p-4 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700">
+              <div className="ml-0 sm:ml-10 p-4 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700">
                 <p>No DLB tickets available for selected date</p>
               </div>
             )}
