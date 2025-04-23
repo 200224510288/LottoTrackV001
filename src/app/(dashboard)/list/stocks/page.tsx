@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Prisma } from "@prisma/client";
 import { useSession } from "@clerk/nextjs";
 
+// get the stock details from the database
 type LotteryWithStock = Prisma.LotteryGetPayload<{
   include: {
     Stock: true;
@@ -27,7 +28,7 @@ export default function StaffLotteryView() {
     document.title = "Staff Lottery Availability";
     fetchLotteryData(searchDate);
   }, [searchDate]);
-
+// fetch the lottery data based on the selected date.
   const fetchLotteryData = async (date: string) => {
     try {
       setLoading(true);
@@ -102,7 +103,7 @@ export default function StaffLotteryView() {
       </div>
     </div>
   );
-
+// setion header
   const CategoryHeader = ({ title }: { title: string }) => (
     <div className="flex items-center gap-4 mb-6">
       <div className="h-1 w-10 bg-NavBlue rounded-full"></div>
@@ -139,6 +140,7 @@ export default function StaffLotteryView() {
                     style={{ maxWidth: "280px" }}
                   >
                     <div className="relative h-48 w-full overflow-hidden">
+                      
                       <Image 
                         src={ticket.ImageUrl || "/default-image.png"} 
                         alt={ticket.LotteryName}

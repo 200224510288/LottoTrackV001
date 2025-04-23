@@ -8,6 +8,7 @@ import { ITEM_PER_PAGE } from "@/lib/settings";
 import FormModal from "@/components/FormModal";
 import { auth } from "@clerk/nextjs/server";
 
+//define a realtionship between agent and user
 type AgentList = Agent & { User: User; Agent_Contact_Number: Agent_Contact_Number[] };
 
 const AgentListPage = async ({ searchParams }: { searchParams: { [key: string]: string | undefined } }) => {
@@ -41,7 +42,7 @@ const AgentListPage = async ({ searchParams }: { searchParams: { [key: string]: 
     }),
     prisma.agent.count({ where: query }),
   ]);
-
+// difine the columns
   const columns = [
     { header: "Agent Name", accessor: "agent",className:"ml-20" },
     { header: "Email", accessor: "User.Email", className: "hidden md:table-cell" },
@@ -54,7 +55,7 @@ const AgentListPage = async ({ searchParams }: { searchParams: { [key: string]: 
       ? [{ header: "Actions", accessor: "actions" }]
       : []),
   ];
-
+// fetch the agent list details
   const renderRow = (item: AgentList) => (
     <tr key={item.AgentID} className="border-b  border-gray-200  even:bg-slate-50 text-sm hover:bg-[#6BAFB3]/30">
       <td className="font-semibold pl-2 py-4">{item.FirstName || "N/A"} {item.LastName || "N/A"}</td>

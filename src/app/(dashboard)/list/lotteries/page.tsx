@@ -11,6 +11,7 @@ import Image from "next/image";
 type LotteryList = Lottery & { Stock: Stock; Staff: Staff }; 
 
 const LotteryListPage = async ({ searchParams }: { searchParams: { [key: string]: string | undefined } }) => {
+  //get the authentication verification.
   const user = await currentUser();
   const { sessionClaims } = await auth();
   const role = (sessionClaims?.metadata as { role?: string })?.role;
@@ -35,7 +36,7 @@ const LotteryListPage = async ({ searchParams }: { searchParams: { [key: string]
       prisma.lottery.findMany({
         where: query,
         include: {
-          Stock: true, // Fixed lowercase "stock"
+          Stock: true, 
           Staff: true,
         },
         take: ITEM_PER_PAGE,
@@ -46,7 +47,7 @@ const LotteryListPage = async ({ searchParams }: { searchParams: { [key: string]
   } catch (error) {
     console.error("Error fetching lottery data: ", error);
   }
-
+// define the table names with accessor
   const columns = [
     { header: "Lottery Image", accessor: "LotteryImage" },
     { header: "Lottery Name", accessor: "LotteryName" },
@@ -62,7 +63,7 @@ const LotteryListPage = async ({ searchParams }: { searchParams: { [key: string]
       ? [{ header: "Actions", accessor: "actions" }]
       : []),
   ];
-
+//fetch the data to the tables
   const renderRow = (item: LotteryList) => (
     <tr key={item.LotteryID} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-PurpleLight">
       <td className="flex items-center gap-4 p-4">
@@ -97,6 +98,7 @@ const LotteryListPage = async ({ searchParams }: { searchParams: { [key: string]
       <td className="hidden md:table-cell">{item.Staff?.FirstName || "N/A"}</td>
       {role && (
         <td>
+  
           <div className="flex items-center gap-2">
             <FormModal table="lottery" type="update" id={item.LotteryID} data={item} />
             {(role === "admin" || role === "district_agent" || role === "office_staff") && 

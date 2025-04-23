@@ -7,6 +7,7 @@ import { Prisma } from "@prisma/client";
 import { useSession } from "@clerk/nextjs";
 import { useCart } from "@/components/CartContext";
 
+// fetch the available lotteries from the date base
 type LotteryWithStock = Prisma.LotteryGetPayload<{
   include: {
     Stock: true;
@@ -27,7 +28,7 @@ export default function AgentLotteryView() {
   // Get today's date in YYYY-MM-DD format for the min attribute
   const today = new Date().toISOString().split("T")[0];
 
-  // Use cart context
+  // Use cart context for add lotteries
   const { addToCart } = useCart();
 
   useEffect(() => {
@@ -59,7 +60,7 @@ export default function AgentLotteryView() {
       setLoading(false);
     }
   };
-
+// update the prices based on the quantities
   const handleQuantityChange = (ticketId: number, value: number) => {
     setQuantities((prev) => {
       const newQuantities = new Map(prev);
@@ -99,7 +100,7 @@ export default function AgentLotteryView() {
   const handleSearch = () => {
     fetchLotteryData(searchDate);
   };
-
+// fetch the lottery availability
   const getAvailabilityStatus = (ticket: LotteryWithStock) => {
     return ticket.Stock?.Availability || "Unavailable";
   };

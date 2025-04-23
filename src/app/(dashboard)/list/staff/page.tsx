@@ -52,7 +52,7 @@ const StaffListPage = async ({ searchParams }: { searchParams: { [key: string]: 
     }),
     prisma.staff.count(),
   ]);
-
+// define the columns names
   const columns = [
     { header: "Staff Name", accessor: "staff" },
     { header: "Email", accessor: "User.Email", className: "hidden md:table-cell" },
@@ -64,7 +64,7 @@ const StaffListPage = async ({ searchParams }: { searchParams: { [key: string]: 
       ? [{ header: "Actions", accessor: "actions" }]
       : []),
   ];
-
+// fetch the staff list data from table
   const renderRow = (item: StaffList) => (
     <tr key={item.StaffID} className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-PurpleLight">
       <td className="flex items-center gap-5 p-4">
