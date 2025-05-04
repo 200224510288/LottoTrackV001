@@ -1,23 +1,23 @@
-// types.ts
+// components/Ordertypes.ts
 import { Order, Delivery, Staff, Agent } from "@prisma/client";
 
-export type OrderWithRelations = Order & { 
-  Delivery: { 
+export type OrderWithRelations = Order & {
+  Delivery: {
     BusType: string;
     StaffID: string;
     NumberPlate: string;
     ArrivalTime: Date;
     DispatchTime: Date;
-  } | null; 
+  } | null;
   Staff: {
     FirstName: string;
     LastName: string;
     StaffID: string;
-  } | null; 
+  } | null;
   Agent: {
     FirstName: string;
     LastName: string;
-    City: string;
+    City: string | null; // Allow null for City
     AgentID: string;
   } | null;
   ContainedLotteries: {

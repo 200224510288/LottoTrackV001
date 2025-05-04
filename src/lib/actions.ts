@@ -10,6 +10,11 @@ import { z } from "zod";
 import { CartItem } from "@/components/CartContext"; 
 import { auth } from '@clerk/nextjs/server';
 
+
+
+
+
+//define the type for the cart item
 type DeliveryInfo = {
   deliveryOption: "selfPick" | "dispatch";
   busStop?: string;
