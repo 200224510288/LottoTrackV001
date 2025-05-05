@@ -78,6 +78,7 @@ function transformOrderData(apiOrders: any[]): OrderWithRelations[] {
           LotteryID: item.Lottery.LotteryID,
           LotteryName: item.Lottery.LotteryName,
           UnitPrice: item.Lottery.UnitPrice,
+          DrawDate: item.Lottery.DrawDate,
         },
       })),
     };
@@ -192,69 +193,7 @@ const OrderHistory = () => {
     router.push(`?${params.toString()}`);
   };
 
-  // Function to generate LaTeX content for the sales report
-  const generateLatexContent = () => {
-    const startDateStr = formatDate(dateRange.startDate);
-    const endDateStr = formatDate(dateRange.endDate);
 
-    // Generating table rows for orders
-    const orderRows = orders
-      .map(
-        (order) => `
-        ${order.OrderID} &
-        ${order.Agent ? `${order.Agent.FirstName} ${order.Agent.LastName}` : 'Unknown'} &
-        ${order.totalQuantity} &
-        ${order.Status} &
-        Rs ${order.TotalAmount.toFixed(2)} &
-        ${formatDate(order.OrderTime)} &
-        ${order.Delivery ? order.Delivery.BusType : 'Self-Pickup'} &
-        ${order.Agent ? order.Agent.City : 'Unknown'} &
-        ${order.Staff ? `${order.Staff.FirstName} ${order.Staff.LastName}` : 'Unassigned'} \\\\ \\hline`
-      )
-      .join('\n');
-
-    return `
-\\documentclass[12pt]{article}
-\\usepackage{geometry}
-\\geometry{a4paper, margin=1in}
-\\usepackage{booktabs}
-\\usepackage{siunitx}
-\\usepackage{pdflscape}
-\\usepackage{times}
-
-\\title{Sales Report}
-\\author{}
-\\date{}
-
-\\begin{document}
-
-\\maketitle
-
-\\section*{Sales Report: ${startDateStr} to ${endDateStr}}
-
-\\subsection*{Summary}
-\\begin{itemize}
-    \\item \\textbf{Total Sales:} Rs ${totalSales.toFixed(2)}
-    \\item \\textbf{Total Tickets Sold:} ${totalQuantity.toLocaleString()}
-    \\item \\textbf{Period:} ${startDateStr} to ${endDateStr}
-\\end{itemize}
-
-\\subsection*{Order Details}
-\\begin{landscape}
-\\begin{table}[h!]
-\\centering
-\\caption{Order Details}
-\\begin{tabular}{|l|l|c|l|r|l|l|l|l|}
-\\hline
-\\textbf{Order ID} & \\textbf{Agent Name} & \\textbf{Quantity} & \\textbf{Status} & \\textbf{Amount} & \\textbf{Date} & \\textbf{Delivery Type} & \\textbf{City} & \\textbf{Staff Name} \\\\ \\hline
-${orderRows}
-\\end{tabular}
-\\end{table}
-\\end{landscape}
-
-\\end{document}
-`;
-  };
 
   const handleGenerateReport = () => {
     // Create PDF document with portrait orientation
@@ -471,8 +410,6 @@ ${orderRows}
     const netRevenue = totalSales - totalCommission;
     doc.text(`Total Ticket Quantity: Rs. ${totalQuantity.toLocaleString()}`, summaryCol2, finalY + 30);
     
-
-  
     // Save the PDF
     doc.save(`NLB_DLB_Sales_Report_${formatDate(dateRange.startDate)}_to_${formatDate(dateRange.endDate)}.pdf`);
   };

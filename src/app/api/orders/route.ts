@@ -85,7 +85,7 @@ export async function GET(req: NextRequest) {
           },
           ContainedLotteries: {
             include: {
-              Lottery: { select: { LotteryID: true, LotteryName: true, UnitPrice: true } },
+              Lottery: { select: { LotteryID: true, LotteryName: true, UnitPrice: true, DrawDate: true  } },
             },
           },
         },

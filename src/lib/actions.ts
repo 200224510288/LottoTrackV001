@@ -126,7 +126,139 @@ export type Order = {
     Phone: string;
   };
   totalQuantity: number;
+  AgentID?: string; 
 };
+
+
+
+
+
+export async function fetchAllOrders() {
+  try {
+    // Check admin authorization
+    const { userId } = await auth();
+    
+    if (!userId) {
+      return {
+        success: false,
+        error: true,
+        message: "Authentication required",
+        orders: []
+      };
+    }
+    
+    // Log to debug
+    console.log("Fetching all orders by admin:", userId);
+    
+    // Fetch all orders without agent filter
+    const rawOrders = await prisma.order.findMany({
+      orderBy: {
+        OrderID: 'desc'
+      }
+    });
+    
+    console.log(`Found ${rawOrders.length} total orders in system`);
+    
+    // Process each order individually to avoid map issues
+    const transformedOrders: Order[] = [];
+    
+    for (const order of rawOrders) {
+      try {
+        // Fetch related data separately to avoid complex join issues
+        const containedLotteries = await prisma.order_Contain_Lottery.findMany({
+          where: { 
+            OrderID: order.OrderID 
+          },
+          include: {
+            Lottery: true
+          }
+        });
+        
+        const delivery = await prisma.delivery.findUnique({
+          where: { 
+            OrderID: order.OrderID 
+          }
+        });
+        
+        const agent = await prisma.agent.findUnique({
+          where: { 
+            AgentID: order.AgentID 
+          }
+        });
+        
+        // Safely construct the transformed order
+        const transformedOrder: Order = {
+          OrderID: order.OrderID,
+          TotalAmount: order.TotalAmount,
+          Status: order.Status,
+          StaffID: order.StaffID,
+          CreatedAt: order.OrderDate.toISOString(),
+          UpdatedAt: order.OrderDate.toISOString(), // Using OrderDate for UpdatedAt
+          AgentID: order.AgentID, // Include the AgentID in the response
+          
+          // Safely handle Delivery
+          Delivery: delivery ? {
+            BusType: delivery.BusType || "Unknown",
+            StaffID: delivery.StaffID,
+            NumberPlate: delivery.NumberPlate,
+            ArrivalTime: delivery.ArrivalTime || new Date(),
+            DispatchTime: delivery.DispatchTime || new Date()
+          } : null,
+          
+          // Safely handle ContainedLotteries
+          ContainedLotteries: containedLotteries.map(item => ({
+            Quantity: item.Quantity,
+            Lottery: {
+              LotteryID: item.Lottery.LotteryID,
+              LotteryName: item.Lottery.LotteryName,
+              UnitPrice: item.Lottery.UnitPrice,
+              DrawDate: item.Lottery.DrawDate || new Date(),
+            }
+          })),
+          
+          // Safely handle Customer
+          Customer: agent ? {
+            CustomerID: parseInt(agent.AgentID),
+            FullName: agent.FirstName || "Unknown Customer",
+            Email: agent.City || "",
+            Phone: agent.HomeAddress || ""
+          } : {
+            CustomerID: 0,
+            FullName: "Unknown Customer",
+            Email: "",
+            Phone: ""
+          },
+          
+          // Calculate totalQuantity
+          totalQuantity: containedLotteries.reduce(
+            (sum, item) => sum + item.Quantity, 0
+          )
+        };
+        
+        transformedOrders.push(transformedOrder);
+      } catch (orderErr) {
+        console.error(`Error processing order ${order.OrderID}:`, orderErr);
+        // Continue with other orders instead of failing completely
+      }
+    }
+
+    return {
+      success: true,
+      error: false,
+      orders: transformedOrders
+    };
+    
+  } catch (err: any) {
+    console.error("Fetch All Orders Error:", err);
+    return {
+      success: false,
+      error: true,
+      message: err.message || "Failed to fetch orders",
+      orders: []
+    };
+  }
+}
+
 
 export async function fetchAgentOrders() {
   try {
@@ -256,6 +388,9 @@ export async function fetchAgentOrders() {
     };
   }
 }
+
+
+
 
 
 

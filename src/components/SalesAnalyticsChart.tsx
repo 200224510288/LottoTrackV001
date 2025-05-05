@@ -1,4 +1,4 @@
-// SalesAnalyticsChart.js
+// SalesAnalyticsChart
 'use client';
 
 import React, { useState } from 'react';
