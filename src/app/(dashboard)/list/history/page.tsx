@@ -19,10 +19,6 @@ import autoTable from "jspdf-autotable";
 const ITEM_PER_PAGE = 10;
 const doc = new jsPDF();
 
-
-
-
-
 // Date formatting function
 const formatDate = (date: string | number | Date) => {
   return new Date(date).toISOString().split('T')[0];
@@ -81,6 +77,10 @@ function transformOrderData(apiOrders: any[]): OrderWithRelations[] {
           DrawDate: item.Lottery.DrawDate,
         },
       })),
+      // Add the missing required properties
+      Customer: order.Customer || {},
+      CreatedAt: order.CreatedAt || order.OrderTime || new Date().toISOString(),
+      UpdatedAt: order.UpdatedAt || order.OrderTime || new Date().toISOString()
     };
   });
 }
@@ -97,39 +97,8 @@ const OrderHistory = () => {
   const view = searchParams.get('view') || 'newest';
   const search = searchParams.get('search');
 
-  type Order = {
-    OrderID: any;
-    Status: any;
-    TotalAmount: any;
-    OrderTime: any;
-    OrderDate: Date;
-    AgentID: string;
-    StaffID: string | null;
-    TotalCommission: number;
-    totalQuantity: any;
-    Agent: {
-      FirstName: string;
-      LastName: string;
-      City: any;
-      AgentID: string;
-    } | null;
-    Staff: {
-      FirstName: string;
-      LastName: string;
-      StaffID: string;
-    } | null;
-    Delivery: {
-      BusType: any;
-      StaffID: string;
-      NumberPlate: string;
-      ArrivalTime: Date;
-      DispatchTime: Date;
-    } | null;
-    ContainedLotteries: any[];
-  };
-
   // State for all the data
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<OrderWithRelations[]>([]);
   const [count, setCount] = useState(0);
   const [salesData, setSalesData] = useState([]);
   const [totalSales, setTotalSales] = useState(0);

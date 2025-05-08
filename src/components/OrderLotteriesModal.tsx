@@ -35,28 +35,34 @@ export interface OrderWithRelations {
   OrderID: number;
   TotalAmount: number;
   Status: string;
-  OrderTime: string;
+  OrderTime: string | Date;
+  OrderDate?: Date;
   StaffID: string | null;
-  CreatedAt: string;
-  UpdatedAt: string;
+  AgentID?: string;
+  TotalCommission?: number;
+  totalQuantity: number;
   Agent?: {
+    AgentID: string;
     FirstName: string;
     LastName: string;
     City: string;
-  };
+  } | null;
   Staff?: {
     FirstName: string;
     LastName: string;
-  };
+    StaffID?: string;
+  } | null;
   Delivery?: {
     BusType: string;
     StaffID: string;
     NumberPlate: string;
     ArrivalTime: Date;
     DispatchTime: Date;
-  };
+  } | null;
   ContainedLotteries: Array<any>;
-  totalQuantity: number;
+  Customer: any;
+  CreatedAt: string;
+  UpdatedAt: string;
 }
 
 interface OrderLotteriesModalProps {
