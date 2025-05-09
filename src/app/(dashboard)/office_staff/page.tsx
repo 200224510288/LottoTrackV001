@@ -1,9 +1,7 @@
 import AdminPage from "../admin/page";
 
 const OfficeStaffPage = () => {
-  return (
-    AdminPage()  );
-  
+  return <AdminPage />;
 }
 
 export default OfficeStaffPage;
