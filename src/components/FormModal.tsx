@@ -78,7 +78,8 @@ const FormModal = ({
         <span className="text-center font-medium">
           All data will be lost. Are you sure you want to delete this {table}?
         </span>
-        <button className="bg-red-700 text-white py-2 px-4 rounded-md border-none w-max self-center">
+        <button className="bg-red-700 text-white py-2 px-4 rounded-md border-none w-max self-center"
+          data-cy={`delete-button`}>
           Delete
         </button>
       </form>
@@ -92,12 +93,11 @@ const FormModal = ({
     return (
       <>
         <button
+          data-cy={`open-${type}-modal`}
           className={`${size} flex items-center justify-center rounded-full ${bgColor}`}
           onClick={() => setOpen(true)}
-        >
-          <Image src={`/${type}.png`} alt="" width={20} height={20} />
-          
-          
+>
+      <Image src={`/${type}.png`} alt="" width={20} height={20} />
         </button>
         {open && (
           <div className="w-screen h-screen absolute left-0 top-0 bg-black bg-opacity-60 z-50 flex items-center justify-center">

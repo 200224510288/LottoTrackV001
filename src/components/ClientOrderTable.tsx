@@ -7,6 +7,7 @@ import OrderLotteriesModal from "@/components/OrderLotteriesModal";
 import Image from 'next/image';
 import { useUser } from "@clerk/nextjs";
 import { OrderWithRelations } from "@/components/Ordertypes"; // separate file for types
+import { type } from "os";
 
 
 
@@ -86,6 +87,7 @@ const ClientOrderTable = ({ orders: initialOrders, columns, role }: ClientOrderT
         <td>
           <div className="flex items-center gap-2">
             <button
+              data-cy={`open-order-update-modal`}
               className="w-7 h-7 flex items-center justify-center rounded-full bg-DashboardBlue hover:bg-blue-600"
               onClick={() => handleViewLotteries(item)}
             >

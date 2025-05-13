@@ -1,14 +1,15 @@
 describe('Clerk Login Page', () => {
     beforeEach(() => {
       cy.visit('/');
+      cy.viewport(1280, 720); 
     });
   
     it('should render login form with Clerk fields', () => {
         cy.get('form').should('exist');
     
-        cy.get('input[type="text"]').first().should('exist');      // Username/email field
-        cy.get('input[type="password"]').should('exist');          // Password field
-        cy.get('button').contains('Login').should('exist');        // Login button
+        cy.get('input[type="text"]').first().should('exist');      
+        cy.get('input[type="password"]').should('exist');         
+        cy.get('button').contains('Login').should('exist');     
       });
     
       it('should show error with invalid credentials', () => {
